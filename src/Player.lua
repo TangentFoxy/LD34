@@ -1,54 +1,16 @@
 local class = require "lib.middleclass"
-local Player = class("Player")
+local Body = require "Body"
+local Player = class("Player", Body)
 local lg = love.graphics
 
 local random = math.random
 math.randomseed(os.time())
 
 function Player:initialize()
-    self.x = 0
-    self.y = 0
-    self.sector = false --set when player enters a sector
+    Body.initialize(self)
     self.image = 1      --1 is the shuttle
-
-    self.color = {random(80, 240), random(80, 240), random(80, 240), 255}
-
     self.mode = 0       --main=0, target=1, heading=2
-    self.target = false --object, either a sector or local target
     self.op = ""        --opcodes
-
-    self.heading = 1    --right is 1 (see heading codes)
-    self.throttle = 0
-
-    self.speed = 0
-    self.acceleration = 0.1 -- 1 pixel per second^2
-    self.maxSpeed = 10      -- 100 pixels per second
-end
-
-function Player:update(dt)
-    -- accelerate as needed
-    if self.throttle > self.speed then
-        self.speed = self.speed + self.acceleration
-        if self.speed > self.throttle then
-            self.speed = self.throttle
-        end
-    elseif self.throttle < self.speed then
-        self.speed = self.speed - self.acceleration
-        if self.speed < self.throttle then
-            self.speed = self.throttle
-        end
-    end
-
-    -- now move somewhere
-    if self.heading == 10 then
-        self.x = self.x - self.speed
-    elseif self.heading == 1 then
-        self.x = self.x + self.speed
-    elseif self.heading == 0 then
-        self.y = self.y - self.speed
-    elseif self.heading == 11 then
-        self.y = self.y + self.speed
-    end
 end
 
 local note1 = lg.newImage("img/note1.png")

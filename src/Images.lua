@@ -8,7 +8,7 @@ local images = {
     },
     {
         lg.newImage("img/station-alpha.png"),
-        4, 4, 18, 18
+        5, 5, 18, 18
     }
 }
 

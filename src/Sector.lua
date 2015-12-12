@@ -43,7 +43,7 @@ function Sector:update(dt)
     for i=1,#self.targets do
         self.targets[i]:update(dt)
     end
-    player:update(dt)
+    self.player:update(dt)
 end
 
 --NOTE WE GONNA NEED WAYPOINT INDICATOR / THINGS WHEN STUFF IS OFF SCREEN
@@ -62,7 +62,6 @@ function Sector:draw()
             images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
         end
     end
-
 
     lg.setColor(self.player.color)
     if self.player.heading == 10 then

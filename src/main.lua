@@ -8,7 +8,7 @@ local player = Player()
 
 sector:enter(player, 10) --heading code for left is 10
 
-local time, rate = 0, 0.1
+local time, rate = 0, 0.016
 function love.update(dt)
     time = time + dt
     while time >= rate do
