@@ -15,7 +15,7 @@ function Player:initialize()
 
     self.mode = 0       --main=0, target=1, heading=2
     self.target = false --object, either a sector or local target
-    self.op = {}        --opcodes
+    self.op = ""        --opcodes
 
     self.heading = 1    --right is 1 (see heading codes)
     self.throttle = 0
@@ -59,155 +59,82 @@ function Player:drawModules()
     lg.draw(note2, lg.getWidth() - 153, lg.getHeight() - 237)
 end
 
-function Player:keypressed(key)
-    print("KEY", key)
-    table.insert(self.op, key)
-    for i=1,#self.op do
-        print(i,self.op[i])
-    end
+function Player:opcode(code)
+    self.op = self.op .. code
 
     if #self.op >= 3 then
-        if self.mode == 0 then --main mode
-            if self.op[1] == 0 then
-                if self.op[2] == 0 then
-                    if self.op[3] == 0 then
-                        --000 TARGET (###)
-                        self.mode = 1
-                    else
-                        --001 HEADING (###)
-                        self.mode = 2
-                    end
-                else
-                    if self.op[3] == 0 then
-                        --010 WARP_START (@TARGET / @HEADING)
-                        self:warp()
-                    else
-                        --011 WARP_STOP (@TARGET)
-                        self:abortWarp()
-                    end
-                end
-            else
-                if self.op[2] == 0 then
-                    if self.op[3] == 0 then
-                        --100 COMMUNICATE (@TARGET)
-                        self:openComms()
-                    else
-                        --101 SCAN (@TARGET)
-                        self:scan()
-                    end
-                else
-                    if self.op[3] == 0 then
-                        --110 LASER (@TARGET)
-                        self:laser()
-                    else
-                        --111 MISSILE (@TARGET)
-                        self:missile()
-                    end
-                end
+        if self.mode == 0 then
+            -- MAIN MODE
+            if self.op == "000" then
+                self.mode = 1 --TARGET (A##)
+            elseif self.op == "001" then
+                self.mode = 2 --HEADING (B##)
+            elseif self.op == "010" then
+                self:warp()   --WARP_START (@TARGET / @HEADING)
+            elseif self.op == "011" then
+                self:abortWarp() --WARP_STOP
+            elseif self.op == "100" then
+                self:openComms() --COMMUNICATE (@TARGET)
+            elseif self.op == "101" then
+                self:scan()    --SCAN (@TARGET)
+            elseif self.op == "110" then
+                self:laser()   --LASER (@TARGET)
+            elseif self.op == "111" then
+                self:missile() --MISSILE (@TARGET)
             end
         elseif self.mode == 1 then
-            self:targetMode()
+            -- TARGET MODE
+            if self.op == "000" then
+                self.target = self.sector:getSector(0, -1)     --SECTOR>UP
+            elseif self.op == "001" then
+                self.target = self.sector:getSector(1, 0)      --SECTOR>RIGHT
+            elseif self.op == "010" then
+                self.target = self.sector:getSector(-1, 0)     --SECTOR>LEFT
+            elseif self.op == "011" then
+                self.target = self.sector:getSector(0, 1)      --SECTOR>DOWN
+            elseif self.op == "100" then
+                self.target = self.sector:getTarget(player, 0) --LOCAL>0
+            elseif self.op == "101" then
+                self.target = self.sector:getTarget(player, 1) --LOCAL>1
+            elseif self.op == "110" then
+                self.target = self.sector:getTarget(player, 2) --LOCAL>2
+            elseif self.op == "111" then
+                self.target = self.sector:getTarget(player, 3) --LOCAL>3
+            end
+            self.mode = 0
         elseif self.mode == 2 then
-            self:headingMode()
-        end
-
-        --no matter what, clear op
-        self.op = {}
-    end
-end
-
-function Player:targetMode()
-    if self.op[1] == 0 then
-        if self.op[2] == 0 then
-            if self.op[3] == 0 then
-                --000 SECTOR>UP
-                self.target = self.sector:getSector(0, -1)
-            else
-                --001 SECTOR>RIGHT
-                self.target = self.sector:getSector(1, 0)
-            end
-        else
-            if self.op[3] == 0 then
-                --010 SECTOR>LEFT
-                self.target = self.sector:getSector(-1, 0)
-            else
-                --011 SECTOR>DOWN
-                self.target = self.sector:getSector(0, 1)
-            end
-        end
-    else
-        if self.op[2] == 0 then
-            if self.op[3] == 0 then
-                --100 LOCAL>0
-                self.target = self.sector:getTarget(player, 0)
-            else
-                --101 LOCAL>1
-                self.target = self.sector:getTarget(player, 1)
-            end
-        else
-            if self.op[3] == 0 then
-                --110 LOCAL>2
-                self.target = self.sector:getTarget(player, 2)
-            else
-                --111 LOCAL>3
-                self.target = self.sector:getTarget(player, 3)
-            end
-        end
-    end
-
-    --no matter what, reset op! (and mode!)
-    self.mode = 0
-    self.op = {}
-end
-
-function Player:headingMode()
-    if self.op[1] == 0 then
-        if self.op[2] == 0 then
-            if self.op[3] == 0 then
-                --000 HEADING>UP
-                self.heading = 0
-            else
-                --001 HEADING>RIGHT
-                self.heading = 1
-            end
-        else
-            if self.op[3] == 0 then
-                --010 HEADING>LEFT
-                self.heading = 10
-            else
-                --011 HEADING>DOWN
-                self.heading = 11
-            end
-        end
-    else
-        if self.op[2] == 0 then
-            if self.op[3] == 0 then
-                --100 SPEED>STOP
-                self.throttle = 0
-            else
-                --101 SPEED>UP
+            -- HEADING MODE
+            if self.op == "000" then
+                self.heading = 0 --HEADING>UP
+            elseif self.op == "001" then
+                self.heading = 1 --HEADING>RIGHT
+            elseif self.op == "010" then
+                self.heading = 10 --HEADING>LEFT
+            elseif self.op == "011" then
+                self.heading = 11 --HEADING>DOWN
+            elseif self.op == "100" then
+                self.throttle = 0 --SPEED>STOP
+            elseif self.op == "101" then
+                --SPEED>UP
                 self.throttle = self.throttle + 1
                 if self.throttle > self.maxSpeed then
                     self.throttle = self.maxSpeed
                 end
-            end
-        else
-            if self.op[3] == 0 then
-                --110 SPEED>DOWN
+            elseif self.op == "110" then
+                --SPEED>DOWN
                 self.throttle = self.throttle - 1
                 if self.throttle < 0 then
                     self.throttle = 0
                 end
-            else
-                --111 SPEED>MAX
-                self.throttle = self.maxSpeed
+            elseif self.op == "111" then
+                self.throttle = self.maxSpeed --SPEED>MAX
             end
+            self.mode = 0
         end
-    end
 
-    --no matter what, reset op! (and mode!)
-    self.mode = 0
-    self.op = {}
+        --no matter what, clear op
+        self.op = ""
+    end
 end
 
 --TODO when entering target-requiring commands with no target, display error

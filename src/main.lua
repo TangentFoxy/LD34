@@ -24,9 +24,9 @@ end
 
 function love.keypressed(key)
     if (key == "0") or (key == "kp0") then
-        player:keypressed(0)
+        player:opcode("0")
     elseif (key == "1") or (key == "kp1") then
-        player:keypressed(1)
+        player:opcode("1")
     elseif key == "escape" then
         love.event.quit()
     end
@@ -35,9 +35,9 @@ end
 --[[
 function love.mousepressed(x, y, button)
     if button == "l" then
-        player:keypressed(0)
+        player:opcode("0")
     elseif button == "r" then
-        player:keypressed(1)
+        player:opcode("1")
     end
 end
 --]]
