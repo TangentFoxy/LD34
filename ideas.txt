@@ -1,0 +1,21 @@
+0 0 0
+0 0 1
+
+0 1 0
+0 1 1
+
+1 0 0
+1 0 1
+
+1 1 0
+1 1 1
+
+a target warp
+b start warp
+c cancel warp
+d ?
+
+e target ship
+f cancel target (why?)
+g science!
+h  idk
