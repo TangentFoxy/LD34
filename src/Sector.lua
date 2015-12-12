@@ -36,8 +36,6 @@ function Sector:enter(player, direction)
     end
 
     player.sector = self
-
-    table.insert(self.targets, player)
     self.player = player
 end
 
@@ -45,6 +43,7 @@ function Sector:update(dt)
     for i=1,#self.targets do
         self.targets[i]:update(dt)
     end
+    player:update(dt)
 end
 
 --NOTE WE GONNA NEED WAYPOINT INDICATOR / THINGS WHEN STUFF IS OFF SCREEN
@@ -62,7 +61,18 @@ function Sector:draw()
         elseif self.targets[i].heading == 11 then
             images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
         end
-        lg.circle("fill", self.targets[i].x, self.targets[i].y, 5)
+    end
+
+
+    lg.setColor(self.player.color)
+    if self.player.heading == 10 then
+        images.draw(self.player.image, self.player.x, self.player.y, math.pi/2)
+    elseif self.player.heading == 1 then
+        images.draw(self.player.image, self.player.x, self.player.y, -math.pi/2)
+    elseif self.player.heading == 0 then
+        images.draw(self.player.image, self.player.x, self.player.y, math.pi)
+    elseif self.player.heading == 11 then
+        images.draw(self.player.image, self.player.x, self.player.y, 0)
     end
 
     lg.translate(-lg.getWidth()/2, -lg.getHeight()/2) --TODO match with top, undo top's translation
@@ -78,9 +88,8 @@ function Sector:getTarget(player, selection)
     end
 
     table.sort(closest, function(a,b) return (a[1] < b[1]) end)
-    table.remove(closest, 1) --remove player from results
 
-    return closest[selection+1]
+    return self.targets[closest[selection+1][2]] -- return target at selection of closest's ID (convoluted!)
 end
 
 function Sector:getSector(x, y)

@@ -28,7 +28,7 @@ function love.keypressed(key)
     elseif (key == "1") or (key == "kp1") then
         player:opcode("1")
     elseif key == "escape" then
-        love.event.quit()
+        love.event.quit() --TODO pause menu instead of quit
     end
 end
 
