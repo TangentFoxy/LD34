@@ -4,6 +4,7 @@ local lg = love.graphics
 
 local images = require "images"
 local Station = require "Station"
+--local Star = require "Star"
 
 local random = math.random
 math.randomseed(os.time())
@@ -15,6 +16,8 @@ function Sector:initialize(world, x, y)
     self.player = false --ref to player if in sector
 
     --NOTE TEMPORARY, LATER WILL BE GENRATED
+    self.background = {}
+    --self.background[1] = Star()
     self.targets = {}
     self.targets[1] = Station(50)
     self.radius = 100
@@ -50,6 +53,11 @@ end
 function Sector:draw()
     lg.translate(lg.getWidth()/2, lg.getHeight()/2) --TODO change to be based on actual position
 
+    lg.setColor(255, 255, 150, 255) --random star colors ya know!
+    images.draw(3, 100 - (self.player.x/20), 100 - (self.player.y/20), math.pi/3)
+
+    lg.translate(-self.player.x, -self.player.y)
+
     for i=1,#self.targets do
         lg.setColor(self.targets[i].color)
         if self.targets[i].heading == 10 then
@@ -74,6 +82,7 @@ function Sector:draw()
         images.draw(self.player.image, self.player.x, self.player.y, 0)
     end
 
+    lg.translate(self.player.x, self.player.y)
     lg.translate(-lg.getWidth()/2, -lg.getHeight()/2) --TODO match with top, undo top's translation
 end
 

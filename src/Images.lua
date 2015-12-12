@@ -2,13 +2,17 @@ local lg = love.graphics
 lg.setDefaultFilter("nearest", "nearest", 1)
 
 local images = {
-    {
+    { --shuttle
         lg.newImage("img/shuttle-alpha.png"),
         3, 3, 7, 7
     },
-    {
+    { --ring station
         lg.newImage("img/station-alpha.png"),
-        5, 5, 18, 18
+        4, 4, 18, 18
+    },
+    { --star
+        lg.newImage("img/star-template-alpha.png"),
+        15, 15, 16, 16
     }
 }
 

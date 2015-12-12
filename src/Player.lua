@@ -78,13 +78,13 @@ function Player:opcode(code)
                 self.throttle = 0 --SPEED>STOP
             elseif self.op == "101" then
                 --SPEED>UP
-                self.throttle = self.throttle + 1
+                self.throttle = self.throttle + 0.7
                 if self.throttle > self.maxSpeed then
                     self.throttle = self.maxSpeed
                 end
             elseif self.op == "110" then
                 --SPEED>DOWN
-                self.throttle = self.throttle - 1
+                self.throttle = self.throttle - 0.7
                 if self.throttle < 0 then
                     self.throttle = 0
                 end
