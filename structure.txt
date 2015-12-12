@@ -1,0 +1,45 @@
+MODULES
+- draw()
+- input(player)
+   (change what they draw based on current input)
+
+BODY
+- update(dt)
+  (player, all objects are based on this)
+
+IMAGES
+- draw(id, x, y, r)
+  (draw particular pre-set up image in specific place with specific rotation)
+
+main
+- sets things up
+- update(dt) (fixed rate)
+  (should probably just world:update() ?)
+- draw()
+  (should probably just world:draw() ?)
+
+keypressed
+- passed directly to player
+- this should be changed?
+
+WORLD
+- getSector() literal sector object
+- changeSector() stupid thing calls sector:enter() and stuff
+
+PLAYER
+- drawModules() just loops through modules and draws them
+- opcode() accepts input, handles, passes to methods
+- warp tries to move locally or jump sector
+- abortWarp cancels a warp (uh oh, the warp is implemented in a way I can't do this right now!)
+- openComms WOULD check a target for its comms feature?
+- scan WOULD check a target for details
+- laser WOULD insta fire and draw a laser line (HOW DRAW IT THOUGH?! O.o)
+- missile WOULD fire missile in one direction or locked onto something
+
+SECTOR
+- enter()
+- changeSector() WHY
+- update()
+- draw()
+- getTarget()
+- after() (cron jobs, good thing to have here)
