@@ -20,17 +20,24 @@ end
 function love.draw()
     lg.translate(lg.getWidth()/2, lg.getHeight()/2)
     sector:draw()
-    lg.setColor(255, 255, 255, 200)
-    lg.line(-10, 0, 10, 0)
-    lg.line(0, -10, 0, 10)
 end
 
 function love.keypressed(key)
-    if key == "0" then
-        --
-    elseif key == "1" then
-        --
+    if (key == "0") or (key == "kp0") then
+        player:keypressed(0)
+    elseif (key == "1") or (key == "kp1") then
+        player:keypressed(1)
     elseif key == "escape" then
         love.event.quit()
     end
 end
+
+--[[
+function love.mousepressed(x, y, button)
+    if button == "l" then
+        player:keypressed(0)
+    elseif button == "r" then
+        player:keypressed(1)
+    end
+end
+--]]

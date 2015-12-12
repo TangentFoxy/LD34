@@ -11,7 +11,7 @@ function World:getSector(x, y)
         self.sectors[x] = {}
     end
     if not self.sectors[x][y] then
-        self.sectors[x][y] = Sector()
+        self.sectors[x][y] = Sector(self, x, y)
     end
 
     return self.sectors[x][y]

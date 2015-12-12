@@ -1,0 +1,27 @@
+Controls fried. Systems intact. Use opcodes:
+
+000 TARGET (A##) A Sector/Local ## ID
+001 HEADING (B##) See Heading Codes
+010 WARP_START (@TARGET / @HEADING)
+011 WARP_STOP Might be expandable.
+
+100 COMMUNICATE (@TARGET)
+101 SCAN (@TARGET)
+110 LASER (@TARGET)
+111 MISSILE (@TARGET)
+
+------ ------ ------
+
+Heading Codes
+
+0 direction
+00 up
+01 right
+10 left
+11 down
+
+1 speed
+00 stop
+01 speed up
+10 speed down
+11 max speed
