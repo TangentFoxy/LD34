@@ -2,12 +2,13 @@ local class = require "lib.middleclass"
 local Body = class("Body")
 
 local random = math.random
-math.randomseed(os.time())
 
 function Body:initialize()
+    self.type = "Body"
+
     self.x = 0
     self.y = 0
-    self.sector = false --only used in Player
+    self.sector = false --only used in Player (NOTE then why is it here instead of in player? in case I need it, duh)
     self.image = 0      --TODO add error image (so it won't just crash)
 
     self.color = {random(80, 240), random(80, 240), random(80, 240), 255}

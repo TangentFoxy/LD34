@@ -13,6 +13,18 @@ local images = {
     { --star
         lg.newImage("img/star-template-alpha.png"),
         15, 15, 16, 16
+    },
+    { --planet (made for re-color)
+        lg.newImage("img/color-world-alpha.png"),
+        10, 10, 16, 16
+    },
+    { --world1
+        lg.newImage("img/world1-alpha.png"),
+        9, 9, 16, 16
+    },
+    { --world2 (with ring)
+        lg.newImage("img/world2-alpha.png"),
+        11, 11, 17, 17
     }
 }
 

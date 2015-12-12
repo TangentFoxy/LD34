@@ -3,11 +3,13 @@ local Sector = class("Sector")
 local lg = love.graphics
 
 local images = require "images"
+local cron = require "lib.cron"
+
 local Station = require "Station"
 local Star = require "Star"
+local Planet = require "Planet"
 
 local random = math.random
-math.randomseed(os.time())
 
 function Sector:initialize(world, x, y)
     self.world = world
@@ -15,12 +17,17 @@ function Sector:initialize(world, x, y)
     self.y = y
     self.player = false --ref to player if in sector
 
+    self.type = "Sector" --for targeting purposes
+
     --NOTE TEMPORARY, LATER WILL BE GENRATED
     self.background = {}
-    self.background[1] = Star(120)
+    self.background[1] = Star(500)
     self.targets = {}
-    self.targets[1] = Station(50)
-    self.radius = 100
+    self.targets[1] = Station(100)
+    self.targets[2] = Planet(2000)
+    self.radius = 200
+
+    self.jobs = {}
 end
 
 function Sector:enter(player, direction)
@@ -42,19 +49,38 @@ function Sector:enter(player, direction)
     self.player = player
 end
 
+function Sector:changeSector(x, y)
+    local direction
+
+    if x == -1 then --GOING left
+        direction = 1
+    elseif x == 1 then --GOING right
+        direction = 10
+    elseif y == -1 then --GOING up
+        direction = 11
+    elseif y == 1 then --GOING down
+        direction = 0
+    end
+
+    self.world:changeSector(self.player, direction, self.x + x, self.y + y)
+    --self.player = false
+end
+
 function Sector:update(dt)
+    for i=#self.jobs,1,-1 do
+        if self.jobs[i]:update(dt) then
+            table.remove(self.jobs, i)
+        end
+    end
+
     for i=1,#self.targets do
         self.targets[i]:update(dt)
     end
     self.player:update(dt)
 end
 
---NOTE WE GONNA NEED WAYPOINT INDICATOR / THINGS WHEN STUFF IS OFF SCREEN
 function Sector:draw()
-    lg.translate(lg.getWidth()/2, lg.getHeight()/2) --TODO change to be based on actual position
-
-    --lg.setColor(255, 255, 150, 255) --random star colors ya know!
-    --images.draw(3, 100 - (self.player.x/20), 100 - (self.player.y/20), math.pi/3)
+    lg.translate(lg.getWidth()/2, lg.getHeight()/2)
 
     for i=1,#self.background do
         lg.setColor(self.background[i].color)
@@ -64,15 +90,32 @@ function Sector:draw()
     lg.translate(-self.player.x, -self.player.y)
 
     for i=1,#self.targets do
-        lg.setColor(self.targets[i].color)
-        if self.targets[i].heading == 10 then
-            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi/2)
-        elseif self.targets[i].heading == 1 then
-            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, -math.pi/2)
-        elseif self.targets[i].heading == 0 then
-            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi)
-        elseif self.targets[i].heading == 11 then
-            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
+        if self.targets[i].type == "Planet" then
+            lg.setColor(self.targets[i].color)
+            if self.targets[i].heading == 10 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi/2)
+            elseif self.targets[i].heading == 1 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, -math.pi/2)
+            elseif self.targets[i].heading == 0 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi)
+            elseif self.targets[i].heading == 11 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
+            end
+        end
+    end
+
+    for i=1,#self.targets do
+        if not (self.targets[i].type == "Planet") then
+            lg.setColor(self.targets[i].color)
+            if self.targets[i].heading == 10 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi/2)
+            elseif self.targets[i].heading == 1 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, -math.pi/2)
+            elseif self.targets[i].heading == 0 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi)
+            elseif self.targets[i].heading == 11 then
+                images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
+            end
         end
     end
 
@@ -88,7 +131,7 @@ function Sector:draw()
     end
 
     lg.translate(self.player.x, self.player.y)
-    lg.translate(-lg.getWidth()/2, -lg.getHeight()/2) --TODO match with top, undo top's translation
+    lg.translate(-lg.getWidth()/2, -lg.getHeight()/2)
 end
 
 function Sector:getTarget(player, selection)
@@ -105,8 +148,15 @@ function Sector:getTarget(player, selection)
     return self.targets[closest[selection+1][2]] -- return target at selection of closest's ID (convoluted!)
 end
 
+--[[
 function Sector:getSector(x, y)
-    return self.world:getSector(self.x + x, self.y + y)
+    --return self.world:getSector(self.x + x, self.y + y)
+    return {self.x + x, self.y + y, type = "SectorCoords"}
+end
+--]]
+
+function Sector:after(time, job)
+    table.insert(self.jobs, cron.after(time, job))
 end
 
 return Sector

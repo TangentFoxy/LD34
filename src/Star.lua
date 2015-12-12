@@ -3,10 +3,10 @@ local Body = require "Body"
 local Star = class("Star", Body)
 
 local random = math.random
-math.randomseed(os.time())
 
 function Star:initialize(distance)
     Body.initialize(self)
+    self.type = "Star"
 
     local direction = random(0, math.pi*2)
     self.x = distance * math.cos(direction)

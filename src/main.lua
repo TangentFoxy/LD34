@@ -2,23 +2,25 @@ local World = require "World"
 local Player = require "Player"
 local lg = love.graphics
 
+math.randomseed(os.time())
+
 local world = World()
 local sector = world:getSector(0, 0)
 local player = Player()
 
-sector:enter(player, 10) --heading code for left is 10
+world:changeSector(player, 10, 0, 0) --heading code for left is 10 (we "came" from the left)
 
 local time, rate = 0, 0.016
 function love.update(dt)
     time = time + dt
     while time >= rate do
         time = time - rate
-        sector:update(rate)
+        world.current:update(rate)
     end
 end
 
 function love.draw()
-    sector:draw()
+    world.current:draw()
     player:drawModules()
 end
 

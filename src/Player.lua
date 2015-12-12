@@ -3,22 +3,24 @@ local Body = require "Body"
 local Player = class("Player", Body)
 local lg = love.graphics
 
+local StickyNotes = require "Modules.StickyNotes"
+
 local random = math.random
-math.randomseed(os.time())
 
 function Player:initialize()
     Body.initialize(self)
+    self.type = "Player"
     self.image = 1      --1 is the shuttle
     self.mode = 0       --main=0, target=1, heading=2
     self.op = ""        --opcodes
+    self.modules = {StickyNotes()}
+    self.warping = false --prevent abusing warp too quickly
 end
 
-local note1 = lg.newImage("img/note1.png")
-local note2 = lg.newImage("img/note2.png")
 function Player:drawModules()
-    lg.setColor(255, 255, 100, 255)
-    lg.draw(note1, 0, lg.getHeight() - 237)
-    lg.draw(note2, lg.getWidth() - 153, lg.getHeight() - 237)
+    for i=1,#self.modules do
+        self.modules[i]:draw()
+    end
 end
 
 function Player:opcode(code)
@@ -47,13 +49,13 @@ function Player:opcode(code)
         elseif self.mode == 1 then
             -- TARGET MODE
             if self.op == "000" then
-                self.target = self.sector:getSector(0, -1)     --SECTOR>UP
+                self.target =  {0, -1, type = "SectorCoords"}  --SECTOR>UP
             elseif self.op == "001" then
-                self.target = self.sector:getSector(1, 0)      --SECTOR>RIGHT
+                self.target =  {1, 0, type = "SectorCoords"}   --SECTOR>RIGHT
             elseif self.op == "010" then
-                self.target = self.sector:getSector(-1, 0)     --SECTOR>LEFT
+                self.target =  {-1, 0, type = "SectorCoords"}  --SECTOR>LEFT
             elseif self.op == "011" then
-                self.target = self.sector:getSector(0, 1)      --SECTOR>DOWN
+                self.target = {0, 1, type = "SectorCoords"}    --SECTOR>DOWN
             elseif self.op == "100" then
                 self.target = self.sector:getTarget(player, 0) --LOCAL>0
             elseif self.op == "101" then
@@ -102,10 +104,38 @@ end
 --TODO when entering target-requiring commands with no target, display error
 
 function Player:warp()
-    if self.target then
-        --TODO stuff
-    elseif self.heading then
-        --TODO stuff
+    if not self.warping then
+        if self.target and (self.target.type == "SectorCoords") then
+            self.sector:after(3, function()
+                self.sector:changeSector(unpack(self.target))
+                self.warping = false
+            end)
+        else
+            self.throttle = 0
+            if self.heading == 0 then      --up
+                self.sector:after(2.5, function()
+                    self.y = self.y - 1000
+                    self.warping = false
+                end)
+            elseif self.heading == 10 then --left
+                self.sector:after(2.5, function()
+                    self.x = self.x - 1000
+                    self.warping = false
+                end)
+            elseif self.heading == 1 then  --right
+                self.sector:after(2.5, function()
+                    self.x = self.x + 1000
+                    self.warping = false
+                end)
+            elseif self.heading == 11 then --down
+                self.sector:after(2.5, function()
+                    self.y = self.y + 1000
+                    self.warping = false
+                end)
+            end
+        end
+
+        self.warping = true
     end
 end
 

@@ -1,17 +1,18 @@
 local class = require "lib.middleclass"
 local Body = require "Body"
-local Station = class("Station", Body)
+local Planet = class("Planet", Body)
 
 local random = math.random
 
-function Station:initialize(distance)
+function Planet:initialize(distance)
     Body.initialize(self)
-    self.type = "Station"
+    self.type = "Planet"
 
     local direction = random(0, math.pi*2)
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
-    self.image = 2
+    self.image = random(4, 6)
+    self.heading = 11
 end
 
-return Station
+return Planet
