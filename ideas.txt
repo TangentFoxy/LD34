@@ -1,0 +1,115 @@
+0 engines/selection
+  0 heading/target
+    0 set heading
+    1 set target
+  1 warp
+    0 start warp
+    1 stop warp
+1 weapons/action
+  0 weapons
+    0 weapon 1
+    1 weapon 2
+  1 actions
+    0 communication
+    1 scanning
+
+1 communication
+2 weapons
+3 scanning
+4 weapon 2 ?
+
+000 set heading (for movement) (warping or not)
+001 set target (for warping/communication) (comms)
+010 start warp (towards target)
+011 stop warp (cancel or exit warp)
+100 fire weapon 1
+101 fire weapon 2
+110 communicate (w target)
+111 scan (target)
+
+0 movement / targeting (preparation)
+  0 selection
+    0 target
+      (enter code to select a target)
+       (ABC, A is sector/local, B/C is ID)
+    1 heading
+      (enter code to select a heading)
+       (see Heading codes v3)
+  1 warp
+    0 start
+      (in current direction or towards target??)
+    1 stop
+      (cancel warp in progress)
+1 action (NEED BETTER NAME)
+  0 peaceful
+    0 communicate
+    1 scan
+  1 attack
+    0 laser
+    1 missile
+
+000 TARGET (###)
+001 HEADING (###)
+010 WARP_START (@TARGET or @HEADING)
+011 WARP_STOP
+
+100 COMMUNICATE (@TARGET)
+101 SCAN (@TARGET)
+110 LASER (@TARGET)
+111 MISSILE (@TARGET)
+
+SELECT>SET>TARGET
+SELECT>SET>HEADING
+ACT>PASSIVE>COMMS
+ACT>ATK>LASER
+ACT>ATK>MISSILE
+
+Heading codes v3:
+
+(0 is direction)
+0 00 up
+0 01 right
+0 10 left
+0 11 down
+
+(1 is speed)
+1 00 stop
+1 01 speed up
+1 10 speed down
+1 11 max speed
+
+Heading codes attempt 2:
+
+000 stop
+001 right
+010 up
+011 speed++
+
+100 left
+101 down
+110 speed--
+111 max speed
+
+Heading codes:
+
+000 up and left
+001 stopped
+010 up and right
+011 right (up ignored)
+
+100 down
+101 down (left ignored)
+110 down and right
+111 down and right
+
+
+
+000
+001
+010
+011
+
+100
+101
+110
+111
