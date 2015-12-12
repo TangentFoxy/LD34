@@ -1,6 +1,7 @@
 local class = require "lib.middleclass"
 local Sector = class("Sector")
 local lg = love.graphics
+local images = require "images"
 
 local random = math.random
 math.randomseed(os.time())
@@ -39,25 +40,31 @@ function Sector:update(dt)
     end
 end
 
+--[[
 lg.setDefaultFilter("nearest", "nearest", 1)
 local shuttle = lg.newImage("img/shuttle-alpha.png")
 local station = lg.newImage("img/station-alpha.png")
+--]]
 --NOTE EVERYTHING IS A SHUTTLE, FIX THIS SHIT
 --NOTE WE GONNA NEED WAYPOINT INDICATOR / THINGS WHEN STUFF IS OFF SCREEN
 function Sector:draw()
+    lg.translate(lg.getWidth()/2, lg.getHeight()/2) --TODO change to be based on actual position
+
     for i=1,#self.targets do
-        --lg.setColor(self.targets[i].color) --bring this back!
+        lg.setColor(self.targets[i].color) --TODO bring this back!
         if self.targets[i].heading == 10 then
-            lg.draw(shuttle, self.targets[i].x, self.targets[i].y, math.pi/2, 3, 3, 7, 7)
+            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi/2)
         elseif self.targets[i].heading == 1 then
-            lg.draw(shuttle, self.targets[i].x, self.targets[i].y, -math.pi/2, 3, 3, 7, 7)
+            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, -math.pi/2)
         elseif self.targets[i].heading == 0 then
-            lg.draw(shuttle, self.targets[i].x, self.targets[i].y, math.pi, 3, 3, 7, 7)
+            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, math.pi)
         elseif self.targets[i].heading == 11 then
-            lg.draw(shuttle, self.targets[i].x, self.targets[i].y, 0, 3, 3, 7, 7)
+            images.draw(self.targets[i].image, self.targets[i].x, self.targets[i].y, 0)
         end
         lg.circle("fill", self.targets[i].x, self.targets[i].y, 5)
     end
+
+    lg.translate(-lg.getWidth()/2, -lg.getHeight()/2) --TODO match with top, undo it
 end
 
 function Sector:getTarget(player, selection)

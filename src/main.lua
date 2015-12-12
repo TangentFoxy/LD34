@@ -18,8 +18,8 @@ function love.update(dt)
 end
 
 function love.draw()
-    lg.translate(lg.getWidth()/2, lg.getHeight()/2)
     sector:draw()
+    player:drawModules()
 end
 
 function love.keypressed(key)
