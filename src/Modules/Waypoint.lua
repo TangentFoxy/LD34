@@ -20,12 +20,13 @@ function Waypoint:draw(player)
         stuff[i][1] = sqrt(stuff[i][1])
         -- if within 540, we draw it where it is, else we gradually draw it farther and farther away
         if stuff[i][1] < 540 then
-            lg.setColor(60, 100, 255, 200)
-            lg.circle("fill", lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi), 5) --TODO replace with target reticule
+            --lg.setColor(60, 100, 255, 200)
+            --lg.circle("fill", lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi), 5) --TODO replace with target reticule
         else
             -- 0 to infinite, need to inverse
             -- 1 / (stuff[i][1] - 540) * 2550 (at 0, is infinity, at 1, is 2550, at 100 is 1/10th of 255)
-            lg.setColor(200, 100, 80, min(1 / (stuff[i][1] - 540) * 255000/2, 180)) --NOTE HAVE NO IDEA IF DOING THIS IS RIGHT/WHAT I WANT
+            -- was changed to 12800 to make the scaling able to see the first planet on long range
+            lg.setColor(200, 100, 80, min(1 / (stuff[i][1] - 540) * 128000, 180)) --NOTE HAVE NO IDEA IF DOING THIS IS RIGHT/WHAT I WANT
             lg.circle("fill", lg.getWidth()/2 + 240*cos(stuff[i][3] + pi), lg.getHeight()/2 + 240*sin(stuff[i][3] + pi), 3) --TODO replace with target arrow
 
             --NOTE DEBUG CIRCLE

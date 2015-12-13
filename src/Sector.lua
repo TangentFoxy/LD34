@@ -4,6 +4,7 @@ local lg = love.graphics
 local insert = table.insert
 local remove = table.remove
 local sort = table.sort
+local random = math.random
 
 local images = require "images"
 local cron = require "lib.cron"
@@ -11,6 +12,10 @@ local cron = require "lib.cron"
 local Station = require "Bodies.Station"
 local Star = require "Bodies.Star"
 local Planet = require "Bodies.Planet"
+local Anomaly = require "Bodies.Anomaly"
+local Asteroid = require "Bodies.Asteroid"
+local Debris = require "Bodies.Debris"
+local Missile = require "Bodies.Missile" --NOTE probably not going to generate missiles in sectors!!
 
 function Sector:initialize(world, x, y)
     self.type = "Sector"
@@ -29,6 +34,15 @@ function Sector:initialize(world, x, y)
     self.bodies[1] = Station(100)
     self.bodies[2] = Planet(2000)
     self.radius = 200
+
+    --NOTE throwing random shit in to test things!
+    for i=1,3 do
+        insert(self.bodies, Anomaly(500))
+        insert(self.bodies, Asteroid(500))
+        insert(self.bodies, Debris(500))
+        insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
+    end
+    insert(self.bodies, Planet(300))
 end
 
 function Sector:update(dt)
@@ -66,6 +80,18 @@ function Sector:draw()
 
     lg.translate(-self.player.x, -self.player.y)
 
+    local layers = {"Anomaly", "Planet", "Asteroid", "Station", "Debris", "Missile"}
+
+    for j=1,#layers do
+        for i=1,#self.bodies do
+            if self.bodies[i].type == layers[j] then
+                lg.setColor(self.bodies[i].color)
+                images.draw(self.bodies[i].image, self.bodies[i].x, self.bodies[i].y, self.bodies[i].r, self.bodies[i].sx, self.bodies[i].sy)
+            end
+        end
+    end
+
+    --[[
     for i=1,#self.bodies do
         if self.bodies[i].type == "Planet" then
             lg.setColor(self.bodies[i].color)
@@ -79,6 +105,7 @@ function Sector:draw()
             images.draw(self.bodies[i].image, self.bodies[i].x, self.bodies[i].y, self.bodies[i].r, self.bodies[i].sx, self.bodies[i].sy)
         end
     end
+    --]]
 
     lg.setColor(self.player.color)
     images.draw(self.player.image, self.player.x, self.player.y, self.player.r, self.player.sx, self.player.sy)
