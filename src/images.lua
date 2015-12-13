@@ -22,6 +22,7 @@ local images = {
     {lg.newImage("img/small/missile.png"), 2, 4.5},       --18 missile (NOTE not centered on purpose!)
     {lg.newImage("img/small/deb1.png"), 3.5, 4},          --19 ? (yellow bit) debris
     {lg.newImage("img/small/deb2.png"), 2, 4},            --20 plate debris
+    [25] = {lg.newImage("img/waypoint.png"), 2.5, 2.5},   --25 waypoint indicator
 }
 
 function images.draw(id, x, y, r, sx, sy)

@@ -36,13 +36,13 @@ function Sector:initialize(world, x, y)
     self.radius = 200
 
     --NOTE throwing random shit in to test things!
-    for i=1,3 do
-        insert(self.bodies, Anomaly(500))
-        insert(self.bodies, Asteroid(500))
-        insert(self.bodies, Debris(500))
-        insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
+    for i=1,30 do
+        --insert(self.bodies, Anomaly(500))
+        insert(self.bodies, Asteroid(1500))
+        --insert(self.bodies, Debris(500))
+        --insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
     end
-    insert(self.bodies, Planet(300))
+    --insert(self.bodies, Planet(300))
 end
 
 function Sector:update(dt)

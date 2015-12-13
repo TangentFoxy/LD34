@@ -15,7 +15,8 @@ function Debris:initialize(range)
 
     self.image = random(19, 20)
     self.sx = random(2, 7)
-    self.sy = self.sx
+    --self.sy = self.sx
+    self.sy = random(2, 7)
 
     self.r = random(0, math.pi*2)
 end
