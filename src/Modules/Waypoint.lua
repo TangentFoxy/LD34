@@ -38,7 +38,8 @@ function Waypoint:draw(player)
     -- draw reticule around targeted thing!
     if player.target then
         lg.setColor(10, 200, 220, 230)
-        lg.circle("line", player.target.x, player.target.y, 5)
+        --lg.circle("line", player.target.x - player.x + lg.getWidth()/2, player.target.y - player.y + lg.getHeight()/2, 5)
+        images.draw(26, player.target.x - player.x + lg.getWidth()/2, player.target.y - player.y + lg.getHeight()/2, math.pi/4, 3, 3)
     end
 end
 

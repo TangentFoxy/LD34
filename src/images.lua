@@ -23,6 +23,7 @@ local images = {
     {lg.newImage("img/small/deb1.png"), 3.5, 4},          --19 ? (yellow bit) debris
     {lg.newImage("img/small/deb2.png"), 2, 4},            --20 plate debris
     [25] = {lg.newImage("img/waypoint.png"), 2.5, 2.5},   --25 waypoint indicator
+    [26] = {lg.newImage("img/reticule.png"), 3.5, 3.5},   --26 reticule indicator
 }
 
 function images.draw(id, x, y, r, sx, sy)

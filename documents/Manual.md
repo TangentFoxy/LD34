@@ -1,6 +1,6 @@
-# Aelloon X3 Shuttle OP Codes Manual
+# Aelloon C3 Shuttle OP Codes Manual
 
-The Aelloon X3 Shuttle has a series of 3 bit opcodes for accessing common
+The Aelloon C3 Shuttle has a series of 3 bit opcodes for accessing common
 routines. The core system is broken down into categories based on each of the
 first 2 bits, followed by an instruction bit, and optionally, 3 more data bits.
 
@@ -45,7 +45,7 @@ direction codes, and 1 is for speed codes.
 
 ## Modes
 
-In order for the X3 to process TARGET and HEADING properly, there are additional
+In order for the C3 to process TARGET and HEADING properly, there are additional
 modes for processing opcodes.
 
 - 0 MAIN: Standard code processing, defined above.
