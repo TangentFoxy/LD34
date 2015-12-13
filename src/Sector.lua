@@ -43,6 +43,18 @@ function Sector:initialize(world, x, y)
         insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
     end
     insert(self.bodies, Planet(300))
+
+    --NOTE Starfield shittily done
+    self.stars = {}
+end
+
+local function star(x, y) --NOTE this should be somewhere else or done differently
+    local self = {}
+    self.color = {random(100, 255), random(100, 255), random(100, 255), 240}
+    self.x = x
+    self.y = y
+    self.r = random(0.5, 1)
+    return self
 end
 
 function Sector:update(dt)
@@ -67,11 +79,41 @@ function Sector:update(dt)
 
     if self.player then
         self.player:update(dt)
+
+        if not (self.player.speed == 0) then
+            --[[
+            -- now move somewhere
+            if self.heading == 10 then
+                self.x = self.x - self.speed
+            elseif self.heading == 1 then
+                self.x = self.x + self.speed
+            elseif self.heading == 0 then
+                self.y = self.y - self.speed
+            elseif self.heading == 11 then
+                self.y = self.y + self.speed
+            end
+            ]]
+            if self.player.heading == 10 then
+                insert(self.stars, star(self.player.x - lg.getWidth()/2, self.player.y + random(-lg.getHeight()/2, lg.getHeight()/2)))
+            elseif self.player.heading == 1 then
+                insert(self.stars, star(self.player.x + lg.getWidth()/2, self.player.y + random(-lg.getHeight()/2, lg.getHeight()/2)))
+            elseif self.player.heading == 0 then
+                insert(self.stars, star(self.player.x + random(-lg.getWidth()/2, lg.getWidth()/2), self.player.y - lg.getHeight()/2))
+            elseif self.player.heading == 11 then
+                insert(self.stars, star(self.player.x + random(-lg.getWidth()/2, lg.getWidth()/2), self.player.y + lg.getHeight()/2))
+            end
+        end
     end
 end
 
 function Sector:draw()
     lg.translate(lg.getWidth()/2, lg.getHeight()/2)
+
+    --starfield should be done elsewhere / differently
+    for i=1,#self.stars do
+        lg.setColor(self.stars[i].color)
+        lg.circle("fill", self.stars[i].x - (self.player.x/20), self.stars[i].y - (self.player.y/20), self.stars[i].r)
+    end
 
     for i=1,#self.background do
         lg.setColor(self.background[i].color)
