@@ -10,40 +10,17 @@ local min = math.min
 local images = require "images"
 
 function Waypoint:draw(player)
-    --first check 2nd to last ophistory, if it sets target or heading mode, use last 2 ophistory in this manner,
-    -- ELSE use last ophistory only
     local stuff = player.sector:getTargetList(player)
 
-    lg.setColor(160, 30, 0, 180)
-
     for i=1,#stuff do
-        --lg.circle("fill", lg.getWidth()/2 + 100*math.cos(stuff[i][3] + math.pi), lg.getHeight()/2 + 100*math.sin(stuff[i][3] + math.pi), 5)
 
         stuff[i][1] = sqrt(stuff[i][1])
+
         -- if within 540, we draw it where it is, else we gradually draw it farther and farther away
         if stuff[i][1] < 540 then
-            if i < 5 then
-                -- first four things get target codes!
-                local msg
-                if i == 1 then
-                    msg = "00"
-                elseif i == 2 then
-                    msg = "01"
-                elseif i == 3 then
-                    msg = "10"
-                elseif i == 4 then
-                    msg = "11"
-                end
-
-                lg.setColor(60, 30, 0, 200)
-                lg.rectangle("fill", lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi), 22, 22)
-
-                lg.setColor(255, 150, 100, 255)
-                lg.print(msg, lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi))
-            else
-                --lg.setColor(60, 100, 255, 200)
-                --lg.circle("fill", lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi), 5) --TODO replace with target reticule
-            end
+            --NOTE I don't think we should mark things that should "be seen" already
+            --lg.setColor(60, 100, 255, 200)
+            --lg.circle("fill", lg.getWidth()/2 + stuff[i][1]*cos(stuff[i][3] + pi), lg.getHeight()/2 + stuff[i][1]*sin(stuff[i][3] + pi), 5) --TODO replace with target reticule
         else
             -- 0 to infinite, need to inverse
             -- 1 / (stuff[i][1] - 540) * 2550 (at 0, is infinity, at 1, is 2550, at 100 is 1/10th of 255)
@@ -56,6 +33,12 @@ function Waypoint:draw(player)
             --lg.setColor(255, 200, 100, 255)
             --lg.circle("line", lg.getWidth()/2 + 240*cos(stuff[i][3] + pi), lg.getHeight()/2 + 240*sin(stuff[i][3] + pi), 5)
         end
+    end
+
+    -- draw reticule around targeted thing!
+    if player.target then
+        lg.setColor(10, 200, 220, 230)
+        lg.circle("line", player.target.x, player.target.y, 5)
     end
 end
 

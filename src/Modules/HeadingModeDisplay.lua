@@ -24,25 +24,7 @@ function HeadingModeDisplay:draw(player)
         lg.setColor(80, 220, 160, 180)
         lg.printf("Direction:", hw - 125, hh - 60 - 22, 250, "left")
         lg.printf("Speed:", hw - 250, hh + 80 - 22, 500, "left")
-
-        --[[
-            lg.setColor(80, 130, 200, 250)
-            lg.printf(msg0, lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, "left")
-            lg.printf(msg1, lg.getWidth()/2, lg.getHeight() - 24, lg.getWidth()*3/4, "left")
-        ]]
     end
-
-    --[[
-    - `000` UP
-    - `001` RIGHT
-    - `010` LEFT
-    - `011` DOWN
-
-    - `100` STOP
-    - `101` SPEED UP
-    - `110` SPEED DOWN
-    - `111` MAX SPEED
-    ]]
 end
 
 return HeadingModeDisplay

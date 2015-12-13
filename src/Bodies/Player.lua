@@ -35,6 +35,7 @@ function Player:initialize()
     self.modules[5] = require("Modules.AssemblyDump")()
     self.modules[6] = require("Modules.HeadingModeDisplay")()
     self.modules[7] = require("Modules.Waypoint")()
+    self.modules[8] = require("Modules.TargetDisplay")()
 end
 
 function Player:drawModules()
