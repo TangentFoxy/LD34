@@ -23,7 +23,7 @@ function Star:initialize(distance)
     end
     --TODO types of stars, better color choice, red/brown dwarfs, blue giants, white neutrons, etc
 
-    self.r = random(0, math.pi*2) --special for background items only
+    self.r = random(0, math.pi*2)
 end
 
 return Star

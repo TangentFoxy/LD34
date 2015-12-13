@@ -41,7 +41,7 @@ function Sector:update(dt)
         end
     end
 
-    -- now actually remove the expired ones
+    -- remove expired jobs
     for key,_ in pairs(remove) do
         self.jobs[key] = nil
     end
@@ -90,6 +90,7 @@ function Sector:getRelativeSector(x, y)
     return self.world:getSector(self.x + x, self.y + y)
 end
 
+--NOTE non-player bodies should get targetDirection in the future
 function Sector:enter(body, isPlayer)
     body.sector = self
     if body.targetDirection == "up" then
@@ -137,8 +138,7 @@ function Sector:leave(body, isPlayer)
     end
 end
 
---NOTE will break if less than 5 bodies in a sector (if you try to grab 3rd for example, when you are the "5th" item, will grab a nil, or crash)
-function Sector:getLocalTarget(body, selection)
+function Sector:getTargetList(body)
     local closest = {} --IDs and distances (squared)
 
     for i=1,#self.bodies do
@@ -148,6 +148,13 @@ function Sector:getLocalTarget(body, selection)
     end
 
     sort(closest, function(a,b) return (a[1] < b[1]) end)
+
+    return closest
+end
+
+--NOTE will break if less than 5 bodies in a sector (if you try to grab 3rd for example, when you are the "5th" item, will grab a nil, or crash)
+function Sector:getLocalTarget(body, selection)
+    local closest = self:getTargetList(body)
 
     if body == self.player then
         return self.bodies[closest[selection+1][2]]
@@ -159,6 +166,7 @@ end
 function Sector:after(time, fn)
     local job = cron.after(time, fn)
     self.jobs[job] = job
+    return job
 end
 
 function Sector:cancel(job)

@@ -13,7 +13,7 @@ function love.update(dt)
     time = time + dt
     while time >= rate do
         time = time - rate
-        world:update()
+        world:update(dt)
     end
 end
 

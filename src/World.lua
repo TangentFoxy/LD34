@@ -20,7 +20,7 @@ function World:getSector(x, y)
     return self.sectors[x][y]
 end
 
-function World:changeSector(x, y)
+function World:changeSector(x, y) --maybe rename to changeViewedSector ?
     self.current = self:getSector(x, y)
 end
 

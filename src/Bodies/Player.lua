@@ -27,11 +27,8 @@ function Player:initialize()
 end
 
 function Player:drawModules()
-    --lg.setColor(self.color)
-    --images.draw(self.image, self.x, self.y, self.r, self.sx, self.sy)
-
     for i=1,#self.modules do
-        self.modules[i]:draw()
+        self.modules[i]:draw(self)
     end
 end
 
