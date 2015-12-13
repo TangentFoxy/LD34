@@ -4,6 +4,8 @@ local Player = class("Bodies.Player", Body)
 
 local lg = love.graphics
 local random = math.random
+local insert = table.insert
+local remove = table.remove
 
 local images = require "images"
 local StickyNotes = require "Modules.StickyNotes"
@@ -22,11 +24,16 @@ function Player:initialize()
     --unique stuff
     self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
     self.op = ""                   -- current opcode
+    self.ophistory = {}            -- last 5 3bit sequences are saved
     self.modules = {StickyNotes()} -- display modules
     self.warping = false          --prevent abusing warp by rapidly selecting it
 
     --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
     self.modules[2] = require("Modules.CodeSelector")()
+    self.modules[3] = require("Modules.CommandHistory")()
+    self.modules[4] = require("Modules.RawCodeDump")()
+    self.modules[5] = require("Modules.AssemblyDump")()
+    self.modules[6] = require("Modules.HeadingModeDisplay")()
 end
 
 function Player:drawModules()
@@ -112,7 +119,11 @@ function Player:opcode(code)
             self.mode = 0
         end
 
-        --no matter what, clear op
+        --no matter what, save history, clear op
+        insert(self.ophistory, self.op)
+        if #self.ophistory > 5 then
+            remove(self.ophistory, 1)
+        end
         self.op = ""
     end
 end

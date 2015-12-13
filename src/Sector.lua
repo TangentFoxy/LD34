@@ -160,9 +160,13 @@ function Sector:getLocalTarget(body, selection)
     local closest = self:getTargetList(body)
 
     if body == self.player then
-        return self.bodies[closest[selection+1][2]]
+        if closest[selection+1] then
+            return self.bodies[closest[selection+1][2]]
+        end
     else
-        return self.bodies[closest[selection+2][2]] --plus 2 so we exclude ourselves at distance zero
+        if closest[selection+2] then
+            return self.bodies[closest[selection+2][2]] --plus 2 so we exclude ourselves at distance zero
+        end
     end
 end
 
