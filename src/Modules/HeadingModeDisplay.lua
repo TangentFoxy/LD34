@@ -4,7 +4,7 @@ local HeadingModeDisplay = class("Modules.HeadingModeDisplay")
 local lg = love.graphics
 
 function HeadingModeDisplay:draw(player)
-    --
+    --TODO actually design this shit (NOTE only appears when in heading mode)
 end
 
 return HeadingModeDisplay

@@ -5,9 +5,6 @@ local lg = love.graphics
 lg.setFont(lg.newFont("Audimat Mono Regular.ttf", 20))
 
 function CodeSelector:draw(player)
-    lg.setColor(10, 30, 55, 255)
-    lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, 24)
-
     local msg0 = ""
     local msg1 = ""
     if player.mode == 0 then
@@ -83,6 +80,9 @@ function CodeSelector:draw(player)
             msg1 = "1:Max Speed"
         end
     end
+
+    lg.setColor(10, 30, 55, 255)
+    lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, 24)
 
     lg.setColor(80, 130, 200, 255)
     lg.printf(msg0, lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, "left")

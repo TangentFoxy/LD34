@@ -96,6 +96,8 @@ end
 --NOTE non-player bodies should get targetDirection in the future
 function Sector:enter(body, isPlayer)
     body.sector = self
+    body.target = false -- don't target a sector you're in (or a body in another sector)
+
     if body.targetDirection == "up" then
         body:setHeading("up")
         body.x = 0

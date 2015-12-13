@@ -4,7 +4,8 @@ local AssemblyDump = class("Modules.AssemblyDump")
 local lg = love.graphics
 
 function AssemblyDump:draw(player)
-    --
+    --first check 2nd to last ophistory, if it sets target or heading mode, use last 2 ophistory in this manner,
+    -- ELSE use last ophistory only
 end
 
 return AssemblyDump

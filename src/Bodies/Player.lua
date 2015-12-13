@@ -119,11 +119,19 @@ function Player:opcode(code)
             self.mode = 0
         end
 
-        --no matter what, save history, clear op
+        -- save history
         insert(self.ophistory, self.op)
+
+        -- clear old history
         if #self.ophistory > 5 then
-            remove(self.ophistory, 1)
+            -- remove it, and if it contained mode change, remove next code
+            local old = remove(self.ophistory, 1)
+            if (old == "000") or (old == "001") then
+                remove(self.ophistory, 1)
+            end
         end
+
+        -- clear op
         self.op = ""
     end
 end
