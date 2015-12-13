@@ -154,8 +154,4 @@ function Sector:getSector(x, y)
 end
 --]]
 
-function Sector:after(time, job)
-    table.insert(self.jobs, cron.after(time, job))
-end
-
 return Sector
