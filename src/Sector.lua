@@ -149,7 +149,7 @@ function Sector:getTargetList(body)
     for i=1,#self.bodies do
         local x = body.x - self.bodies[i].x
         local y = body.y - self.bodies[i].y
-        insert(closest, {x*x+y*y, i})
+        insert(closest, {x*x+y*y, i, math.atan2(y, x)})
     end
 
     sort(closest, function(a,b) return (a[1] < b[1]) end)
@@ -157,7 +157,7 @@ function Sector:getTargetList(body)
     return closest
 end
 
---NOTE will break if less than 5 bodies in a sector (if you try to grab 3rd for example, when you are the "5th" item, will grab a nil, or crash)
+--NOTE can return false
 function Sector:getLocalTarget(body, selection)
     local closest = self:getTargetList(body)
 
@@ -170,6 +170,8 @@ function Sector:getLocalTarget(body, selection)
             return self.bodies[closest[selection+2][2]] --plus 2 so we exclude ourselves at distance zero
         end
     end
+
+    return false
 end
 
 function Sector:after(time, fn)

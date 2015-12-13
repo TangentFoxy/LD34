@@ -72,10 +72,10 @@ function CommandHistory:draw(player)
     end
 
     for i=1,#msg do
-        lg.setColor(20, 30, 50, 255)
+        lg.setColor(20, 30, 50, 180)
         lg.rectangle("fill", 0, (i-1) * 24, lg.getWidth()*2/5, 24)
 
-        lg.setColor(90, 120, 180, 255)
+        lg.setColor(90, 120, 180, 250)
         lg.printf(msg[i], 0, (i-1) * 24, lg.getWidth()*2/5, "left")
     end
 end

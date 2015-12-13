@@ -1,4 +1,6 @@
 math.randomseed(os.time())
+love.graphics.setFont(love.graphics.newFont("Audimat Mono Regular.ttf", 20))
+
 local World = require "World"
 local Player = require "Bodies.Player"
 

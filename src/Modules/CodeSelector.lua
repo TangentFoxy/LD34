@@ -2,8 +2,6 @@ local class = require "lib.middleclass"
 local CodeSelector = class("Modules.CodeSelector")
 local lg = love.graphics
 
-lg.setFont(lg.newFont("Audimat Mono Regular.ttf", 20))
-
 function CodeSelector:draw(player)
     local msg0 = ""
     local msg1 = ""
@@ -81,10 +79,10 @@ function CodeSelector:draw(player)
         end
     end
 
-    lg.setColor(10, 30, 55, 255)
+    lg.setColor(10, 30, 55, 180)
     lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, 24)
 
-    lg.setColor(80, 130, 200, 255)
+    lg.setColor(80, 130, 200, 250)
     lg.printf(msg0, lg.getWidth()/4, lg.getHeight() - 24, lg.getWidth()/2, "left")
     lg.printf(msg1, lg.getWidth()/2, lg.getHeight() - 24, lg.getWidth()*3/4, "left")
 end
