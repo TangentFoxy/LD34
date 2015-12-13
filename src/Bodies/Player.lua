@@ -24,6 +24,9 @@ function Player:initialize()
     self.op = ""                   -- current opcode
     self.modules = {StickyNotes()} -- display modules
     self.warping = false          --prevent abusing warp by rapidly selecting it
+
+    --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
+    self.modules[2] = require("Modules.CodeSelector")()
 end
 
 function Player:drawModules()
