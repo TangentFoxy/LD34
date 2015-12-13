@@ -12,10 +12,12 @@ waypoint indicator / when stuff off screen
 
 Things that add to interface, make it easier to know what codes to type.
 
- One is a categorical selector. As you hit 0's and 1's, it shows what category you can select next.
- Another is like a path, for example: SELECT>SET>HEADING>DIRECTION>UP (and it scrolls up away, keeping a few commands of history)
- Another is a raw dump (so it literally will say 000 000 for example for targeting sector up).
- Another is like an assembly code dump: TARGET SECTOR 0 for 000 000, LASER for firing lasers. HEADING 2 for left (001 010). SPEED UP, or STOP. Or WARP_START.
- Another is a display of what opcodes lead to what directions of travel (as a reference moreso than these others than just show what you're doing in different ways).
+CodeSelector: One is a categorical selector. As you hit 0's and 1's, it shows what category you can select next.
 
- 
+CommandHistory: Another is like a path, for example: SELECT>SET>HEADING>DIRECTION>UP (and it scrolls up away, keeping a few commands of history)
+
+RawCodeDump: Another is a raw dump (so it literally will say 000 000 for example for targeting sector up).
+
+AssemblyDump: Another is like an assembly code dump: TARGET SECTOR 0 for 000 000, LASER for firing lasers. HEADING 2 for left (001 010). SPEED UP, or STOP. Or WARP_START.
+
+HeadingModeDisplay: Another is a display of what opcodes lead to what directions of travel (as a reference moreso than these others than just show what you're doing in different ways).

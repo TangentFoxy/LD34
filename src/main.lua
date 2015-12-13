@@ -1,27 +1,24 @@
+math.randomseed(os.time())
 local World = require "World"
 local Player = require "Bodies.Player"
-local lg = love.graphics
 
-math.randomseed(os.time())
-
-local world = World()
-local sector = world:getSector(0, 0)
 local player = Player()
+local world = World()
 
-world:changeSector(player, 10, 0, 0) --heading code for left is 10 (we "came" from the left)
+local start = world:getSector(0, 0)
+start:enter(player, true)
 
 local time, rate = 0, 0.016
 function love.update(dt)
     time = time + dt
     while time >= rate do
         time = time - rate
-        world.current:update(rate)
+        world:update(dt)
     end
 end
 
 function love.draw()
-    world.current:draw()
-    player:drawModules()
+    world:draw()
 end
 
 function love.keypressed(key)
@@ -30,7 +27,7 @@ function love.keypressed(key)
     elseif (key == "1") or (key == "kp1") then
         player:opcode("1")
     elseif key == "escape" then
-        love.event.quit() --TODO pause menu instead of quit
+        love.event.quit()
     end
 end
 

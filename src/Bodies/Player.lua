@@ -1,25 +1,44 @@
 local class = require "lib.middleclass"
 local Body = require "Bodies.Body"
 local Player = class("Bodies.Player", Body)
+
 local lg = love.graphics
-
-local StickyNotes = require "Modules.StickyNotes"
-
 local random = math.random
+local insert = table.insert
+local remove = table.remove
+
+local images = require "images"
+local StickyNotes = require "Modules.StickyNotes"
 
 function Player:initialize()
     Body.initialize(self)
     self.type = "Player"
-    self.image = 1      --1 is the shuttle
-    self.mode = 0       --main=0, target=1, heading=2
-    self.op = ""        --opcodes
-    self.modules = {StickyNotes()}
-    self.warping = false --prevent abusing warp too quickly
+
+    self.image = 1 --the shuttle
+    self.sx = 3
+    self.sy = 3
+
+    self.target = false --unique
+    self.targetDirection = false --this is direction we would be moving towards the target (sector only)
+
+    --unique stuff
+    self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
+    self.op = ""                   -- current opcode
+    self.ophistory = {}            -- last 5 3bit sequences are saved
+    self.modules = {StickyNotes()} -- display modules
+    self.warping = false          --prevent abusing warp by rapidly selecting it
+
+    --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
+    self.modules[2] = require("Modules.CodeSelector")()
+    self.modules[3] = require("Modules.CommandHistory")()
+    self.modules[4] = require("Modules.RawCodeDump")()
+    self.modules[5] = require("Modules.AssemblyDump")()
+    self.modules[6] = require("Modules.HeadingModeDisplay")()
 end
 
 function Player:drawModules()
     for i=1,#self.modules do
-        self.modules[i]:draw()
+        self.modules[i]:draw(self)
     end
 end
 
@@ -49,33 +68,37 @@ function Player:opcode(code)
         elseif self.mode == 1 then
             -- TARGET MODE
             if self.op == "000" then
-                self.target =  {0, -1, type = "SectorCoords"}  --SECTOR>UP
+                self.target = self.sector:getRelativeSector(0, -1) --SECTOR>UP
+                self.targetDirection = "up"
             elseif self.op == "001" then
-                self.target =  {1, 0, type = "SectorCoords"}   --SECTOR>RIGHT
+                self.target = self.sector:getRelativeSector(1, 0)  --SECTOR>RIGHT
+                self.targetDirection = "right"
             elseif self.op == "010" then
-                self.target =  {-1, 0, type = "SectorCoords"}  --SECTOR>LEFT
+                self.target = self.sector:getRelativeSector(-1, 0) --SECTOR>LEFT
+                self.targetDirection = "left"
             elseif self.op == "011" then
-                self.target = {0, 1, type = "SectorCoords"}    --SECTOR>DOWN
+                self.target = self.sector:getRelativeSector(0, 1)  --SECTOR>DOWN
+                self.targetDirection = "down"
             elseif self.op == "100" then
-                self.target = self.sector:getTarget(player, 0) --LOCAL>0
+                self.target = self.sector:getLocalTarget(self, 0) --LOCAL>0
             elseif self.op == "101" then
-                self.target = self.sector:getTarget(player, 1) --LOCAL>1
+                self.target = self.sector:getLocalTarget(self, 1) --LOCAL>1
             elseif self.op == "110" then
-                self.target = self.sector:getTarget(player, 2) --LOCAL>2
+                self.target = self.sector:getLocalTarget(self, 2) --LOCAL>2
             elseif self.op == "111" then
-                self.target = self.sector:getTarget(player, 3) --LOCAL>3
+                self.target = self.sector:getLocalTarget(self, 3) --LOCAL>3
             end
             self.mode = 0
         elseif self.mode == 2 then
             -- HEADING MODE
             if self.op == "000" then
-                self.heading = 0 --HEADING>UP
+                self:setHeading("up") --HEADING>UP
             elseif self.op == "001" then
-                self.heading = 1 --HEADING>RIGHT
+                self:setHeading("right") --HEADING>RIGHT
             elseif self.op == "010" then
-                self.heading = 10 --HEADING>LEFT
+                self:setHeading("left") --HEADING>LEFT
             elseif self.op == "011" then
-                self.heading = 11 --HEADING>DOWN
+                self:setHeading("down") --HEADING>DOWN
             elseif self.op == "100" then
                 self.throttle = 0 --SPEED>STOP
             elseif self.op == "101" then
@@ -96,7 +119,11 @@ function Player:opcode(code)
             self.mode = 0
         end
 
-        --no matter what, clear op
+        --no matter what, save history, clear op
+        insert(self.ophistory, self.op)
+        if #self.ophistory > 5 then
+            remove(self.ophistory, 1)
+        end
         self.op = ""
     end
 end
@@ -105,47 +132,51 @@ end
 
 function Player:warp()
     if not self.warping then
-        if self.target and (self.target.type == "SectorCoords") then
-            self.sector:after(3, function()
-                self.sector:changeSector(unpack(self.target))
+        if self.target and (self.target.type == "Sector") then
+            self.warping = self.sector:after(3, function()
+                self.sector:leave(self, true)
+                self.target:enter(self, true)
                 self.warping = false
             end)
         else
             self.throttle = 0
             if self.heading == 0 then      --up
-                self.sector:after(2.5, function()
+                self.warping = self.sector:after(2.5, function()
                     self.y = self.y - 1000
                     self.warping = false
                 end)
             elseif self.heading == 10 then --left
-                self.sector:after(2.5, function()
+                self.warping = self.sector:after(2.5, function()
                     self.x = self.x - 1000
                     self.warping = false
                 end)
             elseif self.heading == 1 then  --right
-                self.sector:after(2.5, function()
+                self.warping = self.sector:after(2.5, function()
                     self.x = self.x + 1000
                     self.warping = false
                 end)
             elseif self.heading == 11 then --down
-                self.sector:after(2.5, function()
+                self.warping = self.sector:after(2.5, function()
                     self.y = self.y + 1000
                     self.warping = false
                 end)
             end
         end
-
-        self.warping = true
     end
 end
 
 function Player:abortWarp()
-    --TODO STOP
+    if self.warping then
+        self.sector:cancel(self.warping)
+        self.warping = false
+    else
+        --ERROR (actually..expansion! this is where expansion will go)
+    end
 end
 
 --TODO if not target, broadcast static?
 function Player:openComms()
-    if self.target then
+    if self.target and not (self.target.type == "Sector") then
         --TODO stuff
     end
 end
@@ -159,14 +190,14 @@ end
 
 --TODO if not target, fire blind straight ahead
 function Player:laser()
-    if self.target then
+    if self.target and not (self.target.type == "Sector") then
         --TODO stuff
     end
 end
 
 --TODO if not target, fire blind straight ahead
 function Player:missile()
-    if self.target then
+    if self.target and not (self.target.type == "Sector") then
         --TODO stuff
     end
 end

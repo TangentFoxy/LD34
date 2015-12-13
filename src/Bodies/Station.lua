@@ -11,7 +11,10 @@ function Station:initialize(distance)
     local direction = random(0, math.pi*2)
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
+
     self.image = 2
+    self.sx = random(3, 5)
+    self.sy = self.sx
 end
 
 return Station
