@@ -16,7 +16,8 @@ function Player:initialize()
     self.sx = 3
     self.sy = 3
 
-    --self.target = false
+    self.target = false --unique
+    self.targetDirection = false --this is direction we would be moving towards the target (sector only)
 
     --unique stuff
     self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
@@ -25,8 +26,9 @@ function Player:initialize()
     self.warping = false          --prevent abusing warp by rapidly selecting it
 end
 
-function Player:draw()
-    images.draw(self.image, self.x, self.y, self.r, self.sx, self.sy)
+function Player:drawModules()
+    --lg.setColor(self.color)
+    --images.draw(self.image, self.x, self.y, self.r, self.sx, self.sy)
 
     for i=1,#self.modules do
         self.modules[i]:draw()
@@ -59,34 +61,37 @@ function Player:opcode(code)
         elseif self.mode == 1 then
             -- TARGET MODE
             if self.op == "000" then
-                --TODO DETERMINE IF NEED TO CHANGE TARGETING SECTORS!!
                 self.target = self.sector:getRelativeSector(0, -1) --SECTOR>UP
+                self.targetDirection = "up"
             elseif self.op == "001" then
                 self.target = self.sector:getRelativeSector(1, 0)  --SECTOR>RIGHT
+                self.targetDirection = "right"
             elseif self.op == "010" then
                 self.target = self.sector:getRelativeSector(-1, 0) --SECTOR>LEFT
+                self.targetDirection = "left"
             elseif self.op == "011" then
                 self.target = self.sector:getRelativeSector(0, 1)  --SECTOR>DOWN
+                self.targetDirection = "down"
             elseif self.op == "100" then
-                self.target = self.sector:getTarget(player, 0) --LOCAL>0
+                self.target = self.sector:getLocalTarget(self, 0) --LOCAL>0
             elseif self.op == "101" then
-                self.target = self.sector:getTarget(player, 1) --LOCAL>1
+                self.target = self.sector:getLocalTarget(self, 1) --LOCAL>1
             elseif self.op == "110" then
-                self.target = self.sector:getTarget(player, 2) --LOCAL>2
+                self.target = self.sector:getLocalTarget(self, 2) --LOCAL>2
             elseif self.op == "111" then
-                self.target = self.sector:getTarget(player, 3) --LOCAL>3
+                self.target = self.sector:getLocalTarget(self, 3) --LOCAL>3
             end
             self.mode = 0
         elseif self.mode == 2 then
             -- HEADING MODE
             if self.op == "000" then
-                self.heading = 0 --HEADING>UP
+                self:setHeading("up") --HEADING>UP
             elseif self.op == "001" then
-                self.heading = 1 --HEADING>RIGHT
+                self:setHeading("right") --HEADING>RIGHT
             elseif self.op == "010" then
-                self.heading = 10 --HEADING>LEFT
+                self:setHeading("left") --HEADING>LEFT
             elseif self.op == "011" then
-                self.heading = 11 --HEADING>DOWN
+                self:setHeading("down") --HEADING>DOWN
             elseif self.op == "100" then
                 self.throttle = 0 --SPEED>STOP
             elseif self.op == "101" then

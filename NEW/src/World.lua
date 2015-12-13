@@ -32,4 +32,4 @@ function World:draw()
     self.current:draw()
 end
 
-return Player
+return World
