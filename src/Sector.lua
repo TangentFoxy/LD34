@@ -50,7 +50,10 @@ function Sector:update(dt)
     for i=1,#self.bodies do
         self.bodies[i]:update(dt)
     end
-    self.player:update(dt)
+
+    if self.player then
+        self.player:update(dt)
+    end
 end
 
 function Sector:draw()
