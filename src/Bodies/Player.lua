@@ -1,6 +1,6 @@
 local class = require "lib.middleclass"
-local Body = require "Body"
-local Player = class("Player", Body)
+local Body = require "Bodies.Body"
+local Player = class("Bodies.Player", Body)
 local lg = love.graphics
 
 local StickyNotes = require "Modules.StickyNotes"

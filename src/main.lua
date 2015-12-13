@@ -1,5 +1,5 @@
 local World = require "World"
-local Player = require "Player"
+local Player = require "Bodies.Player"
 local lg = love.graphics
 
 math.randomseed(os.time())

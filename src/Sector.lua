@@ -1,15 +1,14 @@
 local class = require "lib.middleclass"
 local Sector = class("Sector")
 local lg = love.graphics
+local random = math.random
 
 local images = require "images"
 local cron = require "lib.cron"
 
-local Station = require "Station"
-local Star = require "Star"
-local Planet = require "Planet"
-
-local random = math.random
+local Station = require "Bodies.Station"
+local Star = require "Bodies.Star"
+local Planet = require "Bodies.Planet"
 
 function Sector:initialize(world, x, y)
     self.world = world

@@ -1,6 +1,6 @@
 local class = require "lib.middleclass"
-local Body = require "Body"
-local Star = class("Star", Body)
+local Body = require "Bodies.Body"
+local Star = class("Bodies.Star", Body)
 
 local random = math.random
 
