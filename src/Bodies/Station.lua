@@ -10,7 +10,7 @@ function Station:initialize(distance, special)
     self.type = "Station"
     self.name = "Station " .. name.generate(3, 9):gsub("^%l", string.upper)
 
-    local direction = random(0, math.pi*2)
+    local direction = random()*math.pi*2
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
 

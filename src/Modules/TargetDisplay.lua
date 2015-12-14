@@ -19,10 +19,10 @@ function TargetDisplay:draw(player)
         local hw = lg.getWidth()/2
         local hh = lg.getHeight()/2
 
-        for i=1,#stuff do
-            stuff[i][1] = sqrt(stuff[i][1])
+        for i=1,4 do
+            if stuff[i] then
+                stuff[i][1] = sqrt(stuff[i][1])
 
-            if i < 5 then
                 -- first four things get target codes!
                 local msg
                 if i == 1 then
@@ -40,17 +40,17 @@ function TargetDisplay:draw(player)
 
                 lg.setColor(255, 150, 100, 255)
                 lg.print(msg, hw + stuff[i][1]*cos(stuff[i][3] + pi), hh + stuff[i][1]*sin(stuff[i][3] + pi))
-            else
-                break --since we started the loop going through all of them but only care about the first 4
             end
         end
 
+        -- background boxes on sides of screen
         lg.setColor(60, 30, 0, 200)
         lg.rectangle("fill", hw - 50, 0, 100, 22)
         lg.rectangle("fill", 0, hh - 22, 100, 22)
         lg.rectangle("fill", lg.getWidth() - 100, hh - 22, 100, 22)
         lg.rectangle("fill", hw - 50, lg.getHeight() - (24+22), 100, 22)
 
+        -- codes/directions to target
         lg.setColor(255, 150, 100, 255)
         lg.printf("000:Up", hw - 50, 0, 100, "center")
         lg.printf("011:Down", hw - 50, lg.getHeight() - (24+22), 100, "center")

@@ -9,7 +9,7 @@ function Star:initialize(distance)
     self.type = "Star"
     self.name = "U-Type Star" --TODO make types of stars actually a thing..not that they can be targeted
 
-    local direction = random(0, math.pi*2)
+    local direction = random()*math.pi*2
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
 
@@ -24,7 +24,7 @@ function Star:initialize(distance)
     end
     --TODO types of stars, better color choice, red/brown dwarfs, blue giants, white neutrons, etc
 
-    self.r = random(0, math.pi*2)
+    self.r = random()*math.pi*2
 end
 
 return Star

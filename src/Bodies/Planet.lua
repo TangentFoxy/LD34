@@ -10,7 +10,7 @@ function Planet:initialize(distance)
     self.type = "Planet"
     self.name = name.generate(3, 11):gsub("^%l", string.upper)
 
-    local direction = random(0, math.pi*2)
+    local direction = random()*math.pi*2
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
     self:setHeading("down")

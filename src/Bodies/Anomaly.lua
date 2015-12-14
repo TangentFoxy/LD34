@@ -10,7 +10,7 @@ function Anomaly:initialize(range)
     self.type = "Anomaly"
     self.name = name.generate(3, 12):gsub("^%l", string.upper) .. " (Anomaly)"
 
-    local direction = random(0, math.pi*2)
+    local direction = random()*math.pi*2
     local distance = random(0, range)
     self.x = distance * math.cos(direction)
     self.y = distance * math.sin(direction)
@@ -19,7 +19,7 @@ function Anomaly:initialize(range)
     self.sx = random(2, 21)
     self.sy = self.sx
 
-    self.r = random(0, math.pi*2)
+    self.r = random()*math.pi*2
 end
 
 return Anomaly
