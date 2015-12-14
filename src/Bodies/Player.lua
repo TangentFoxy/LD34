@@ -38,6 +38,14 @@ function Player:initialize()
     self.modules[8] = require("Modules.TargetDisplay")()
 end
 
+function Player:update(dt)
+    Body.update(self, dt)
+
+    for i=1,#self.modules do
+        self.modules[i]:update(dt)
+    end
+end
+
 function Player:drawModules()
     for i=1,#self.modules do
         self.modules[i]:draw(self)

@@ -12,7 +12,7 @@ function Main:init()
     world:getSector(0, 0):enter(player, true)
 end
 
-local time, rate = 0, 0.016
+local time, rate = 0, 1/60
 function Main:update(dt)
     time = time + dt
     while time >= rate do

@@ -1,7 +1,12 @@
 --HeadingModeDisplay: Another is a display of what opcodes lead to what directions of travel (as a reference moreso than these others than just show what you're doing in different ways).
 local class = require "lib.middleclass"
-local HeadingModeDisplay = class("Modules.HeadingModeDisplay")
+local Module = require "Modules.Module"
+local HeadingModeDisplay = class("Modules.HeadingModeDisplay", Module)
 local lg = love.graphics
+
+function HeadingModeDisplay:initialize()
+    Module.initialize(self)
+end
 
 function HeadingModeDisplay:draw(player)
     --TODO actually design this shit (NOTE only appears when in heading mode)

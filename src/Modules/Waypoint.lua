@@ -1,5 +1,6 @@
 local class = require "lib.middleclass"
-local Waypoint = class("Modules.Waypoint")
+local Module = require "Modules.Module"
+local Waypoint = class("Modules.Waypoint", Module)
 local lg = love.graphics
 local cos = math.cos
 local sin = math.sin
@@ -8,6 +9,26 @@ local sqrt = math.sqrt
 local min = math.min
 
 local images = require "images"
+
+function Waypoint:initialize()
+    Module.initialize(self)
+
+    self.time = 0
+    self.angle = 0
+end
+
+local rate = 1
+function Waypoint:update(dt)
+    self.time = self.time + dt
+    while self.time >= rate do
+        self.time = self.time - rate
+
+        self.angle = self.angle + pi/4
+        if self.angle > pi then
+            self.angle = pi/4
+        end
+    end
+end
 
 function Waypoint:draw(player)
     local stuff = player.sector:getTargetList(player)
@@ -36,10 +57,12 @@ function Waypoint:draw(player)
     end
 
     -- draw reticule around targeted thing!
-    if player.target then
-        lg.setColor(10, 200, 220, 230)
+    if player.target and not (player.target.type == "Sector") then
+        --lg.setColor(10, 200, 220, 230)
         --lg.circle("line", player.target.x - player.x + lg.getWidth()/2, player.target.y - player.y + lg.getHeight()/2, 5)
-        images.draw(26, player.target.x - player.x + lg.getWidth()/2, player.target.y - player.y + lg.getHeight()/2, math.pi/4, 3, 3)
+        lg.setColor(220, 200, 0, 230)
+        local scale = (player.target.sx + player.target.sy) / 2
+        images.draw(26, player.target.x - player.x + lg.getWidth()/2, player.target.y - player.y + lg.getHeight()/2, self.angle, scale, scale)
     end
 end
 

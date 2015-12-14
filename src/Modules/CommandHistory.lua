@@ -1,7 +1,12 @@
 local class = require "lib.middleclass"
-local CommandHistory = class("Modules.CommandHistory")
+local Module = require "Modules.Module"
+local CommandHistory = class("Modules.CommandHistory", Module)
 local lg = love.graphics
 local insert = table.insert
+
+function CommandHistory:initialize()
+    Module.initialize(self)
+end
 
 function CommandHistory:draw(player)
     local msg = {}

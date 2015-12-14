@@ -1,10 +1,15 @@
 local class = require "lib.middleclass"
-local TargetDisplay = class("Modules.TargetDisplay")
+local Module = require "Modules.Module"
+local TargetDisplay = class("Modules.TargetDisplay", Module)
 local lg = love.graphics
 local cos = math.cos
 local sin = math.sin
 local pi = math.pi
 local sqrt = math.sqrt
+
+function TargetDisplay:initialize()
+    Module.initialize(self)
+end
 
 --TODO somehow option always draw target options ?
 

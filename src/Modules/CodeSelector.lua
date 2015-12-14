@@ -1,6 +1,11 @@
 local class = require "lib.middleclass"
-local CodeSelector = class("Modules.CodeSelector")
+local Module = require "Modules.Module"
+local CodeSelector = class("Modules.CodeSelector", Module)
 local lg = love.graphics
+
+function CodeSelector:initialize()
+    Module.initialize(self)
+end
 
 function CodeSelector:draw(player)
     local msg0 = ""

@@ -1,9 +1,14 @@
 local class = require "lib.middleclass"
-local StickyNotes = class("Modules.StickyNotes")
+local Module = require "Modules.Module"
+local StickyNotes = class("Modules.StickyNotes", Module)
 local lg = love.graphics
 
 local note1 = lg.newImage("img/note1.png")
 local note2 = lg.newImage("img/note2.png")
+
+function StickyNotes:initialize()
+    Module.initialize(self)
+end
 
 function StickyNotes:draw()
     lg.setColor(255, 255, 100, 255)
