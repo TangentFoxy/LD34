@@ -8,6 +8,7 @@ local insert = table.insert
 local remove = table.remove
 
 local images = require "images"
+local sound = require "sound"
 local StickyNotes = require "Modules.StickyNotes"
 
 function Player:initialize()
@@ -56,6 +57,8 @@ function Player:opcode(code)
     self.op = self.op .. code
 
     if #self.op >= 3 then
+        sound.play(3) --a command was run!
+
         if self.mode == 0 then
             -- MAIN MODE
             if self.op == "000" then
