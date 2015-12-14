@@ -244,7 +244,11 @@ function Player:openComms(response, target)
     if self.target and self.target.communicate then
         self.communication = self.target:communicate(self, response) --response is uneeded here, it is always a nil
     else
-        self.communication = target:communicate(self, response)
+        if target then
+            self.communication = target:communicate(self, response)
+        else
+            print("I FUCKED SOMETHING UP THIS ERROR SHOULDN'T HAPPEN\nI BLAME LOMELI EVEN THOUGH HE HAD NOTHING TO DO WITH IT.")
+        end
     end
 end
 
