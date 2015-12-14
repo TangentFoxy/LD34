@@ -1,9 +1,0 @@
-Sectors generating solar systems (basic), or asteroid fields, or empty space, or debris fields. Or solo planets.
-
-Planets / Space Stations -> Comms / Scan special things can happen.
-
-Can be attacked, can attack others.
-
-Factions.
-
-Looting, mining, crafting, enhancing your ship.

@@ -1,0 +1,42 @@
+Sectors generating solar systems (basic), or asteroid fields, or empty space, or debris fields. Or solo planets.
+
+Planets / Space Stations -> Comms / Scan special things can happen.
+
+Can be attacked, can attack others.
+
+Factions.
+
+Looting, mining, crafting, enhancing your ship.
+
+
+Universe.
+
+Start with shitty ship.
+
+Stick note of opcodes, doesn't explain heading/targeting.
+- find out by targeting a station nearby ? or space junk?
+
+Universe generates as you move?
+Sectors?
+
+Solar systems?
+
+Black holes?
+
+Gas giant. Habitable worlds. Anomalies.
+
+
+- warp tries to move locally or jump sector
+- abortWarp cancels a warp (uh oh, the warp is implemented in a way I can't do this right now!)
+- openComms WOULD check a target for its comms feature?
+- scan WOULD check a target for details
+- laser WOULD insta fire and draw a laser line (HOW DRAW IT THOUGH?! O.o)
+- missile WOULD fire missile in one direction or locked onto something
+Need to get the choice module from thestarting station
+
+communicate with planets, stations, scan things
+
+add random debris!
+add asteroids
+menu ?
+save/load
