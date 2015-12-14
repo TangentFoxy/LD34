@@ -7,6 +7,7 @@ local random = math.random
 function Star:initialize(distance)
     Body.initialize(self)
     self.type = "Star"
+    self.name = "U-Type Star" --TODO make types of stars actually a thing..not that they can be targeted
 
     local direction = random(0, math.pi*2)
     self.x = distance * math.cos(direction)

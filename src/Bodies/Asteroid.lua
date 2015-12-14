@@ -3,10 +3,12 @@ local Body = require "Bodies.Body"
 local Asteroid = class("Bodies.Asteroid", Body)
 
 local random = math.random
+local name = require "lib.name"
 
 function Asteroid:initialize(range)
     Body.initialize(self)
     self.type = "Asteroid"
+    self.name = "Asteroid " .. name.generate(1, 2):upper() .. "-" .. random(11, 99)
 
     local direction = random(0, math.pi*2)
     local distance = random(0, range)

@@ -25,7 +25,7 @@ function SelectedTarget:draw(player)
     msg = "TAR:" .. msg
     local width = lg.getFont():getWidth(msg) + 2
 
-    lg.setColor(40, 0, 0, 150) --NOTE may want to make less transparent
+    lg.setColor(40, 0, 0, 200)
     lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 48, width, 48)
     lg.setColor(0, 150, 200, 240)
     lg.print(msg, lg.getWidth()/4, lg.getHeight() - 48)

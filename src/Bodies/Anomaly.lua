@@ -3,10 +3,12 @@ local Body = require "Bodies.Body"
 local Anomaly = class("Bodies.Anomaly", Body)
 
 local random = math.random
+local name = require "lib.name"
 
 function Anomaly:initialize(range)
     Body.initialize(self)
     self.type = "Anomaly"
+    self.name = name.generate(3, 12):gsub("^%l", string.upper) .. " (Anomaly)"
 
     local direction = random(0, math.pi*2)
     local distance = random(0, range)

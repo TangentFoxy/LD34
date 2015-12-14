@@ -2,11 +2,9 @@ local class = require "lib.middleclass"
 local Body = class("Bodies.Body")
 local random = math.random
 
-local name = require "lib.name"
-
 function Body:initialize()
     self.type = "Body"
-    self.name = random() --name.generate(1, 3)
+    self.name = random()
 
     self.x = 0
     self.y = 0

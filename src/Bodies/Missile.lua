@@ -7,6 +7,7 @@ local random = math.random
 function Missile:initialize(x, y, target)
     Body.initialize(self)
     self.type = "Missile"
+    self.name = self.name .. " (Missile)"
 
     self.x = x
     self.y = y

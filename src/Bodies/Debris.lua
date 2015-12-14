@@ -7,6 +7,7 @@ local random = math.random
 function Debris:initialize(range)
     Body.initialize(self)
     self.type = "Debris"
+    self.name = self.name .. " (Debris)"
 
     local direction = random(0, math.pi*2)
     local distance = random(0, range)
