@@ -17,6 +17,78 @@ local Asteroid = require "Bodies.Asteroid"
 local Debris = require "Bodies.Debris"
 local Missile = require "Bodies.Missile" --NOTE probably not going to generate missiles in sectors!!
 
+--[[
+local Bodies = {
+    Station = require "Bodies.Station",
+    Star = require "Bodies.Star",
+    Planet = require "Bodies.Planet",
+    Anomaly = require "Bodies.Anomaly",
+    Asteroid = require "Bodies.Asteroid",
+    Debris = require "Bodies.Debris",
+    Missile = require "Bodies.Missile", --NOTE probably not going to generate missiles in sectors!!
+}
+--]]
+
+-- this might be a bad idea
+--[[
+local special = {
+    {0, 0} = {
+        Station(100, "start")
+    }
+}
+--]]
+
+local Special = {
+    [0] = {
+        [0] = {
+            background = function()
+                return {
+                    Star(500)
+                }
+            end,
+            bodies = function()
+                return {
+                    Station(100, "start"),
+                    Planet(2000)
+                }
+            end,
+            radius = 200
+        }
+    }
+}
+
+local Templates = {
+    {   -- nothingness
+        background = function() return {} end,
+        bodies = function() return {} end,
+        radius = 0
+    },
+    {   -- two stars & a planet
+        background = function()
+            return {
+                Star(10),
+                Star(1000)
+            }
+        end,
+        bodies = function() return {Planet(1000)} end,
+        radius = 400
+    },
+    {
+        --debris field
+        background = function() return {} end,
+        bodies = function()
+            local result = {}
+
+            for i=1,100 do
+                insert(result, Debris(1000))
+            end
+
+            return result
+        end,
+        radius = 700
+    }
+}
+
 function Sector:initialize(world, x, y)
     self.type = "Sector"
     self.world = world
@@ -29,6 +101,24 @@ function Sector:initialize(world, x, y)
 
     self.jobs = {} --timed things to do
 
+    if Special[x] and Special[x][y] then
+        self.background = Special[x][y].background()
+        self.bodies = Special[x][y].bodies()
+        self.radius = Special[x][y].radius
+    else
+        local template = random(1, #Templates)
+        self.background = Templates[template].background()
+        self.bodies = Templates[template].bodies()
+        self.radius = Templates[template].radius
+    end
+
+    --[[
+    for i=1,#Templates[template].background do
+        insert(self.background, Bodies[ Templates[template].background[i] ]())
+    end
+    --]]
+
+    --[[
     --TODO GENERATE STUFF
     self.background[1] = Star(500)
     self.bodies[1] = Station(100)
@@ -43,6 +133,7 @@ function Sector:initialize(world, x, y)
         --insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
     end
     --insert(self.bodies, Planet(300))
+    --]]
 end
 
 function Sector:update(dt)
@@ -90,22 +181,6 @@ function Sector:draw()
             end
         end
     end
-
-    --[[
-    for i=1,#self.bodies do
-        if self.bodies[i].type == "Planet" then
-            lg.setColor(self.bodies[i].color)
-            images.draw(self.bodies[i].image, self.bodies[i].x, self.bodies[i].y, self.bodies[i].r, self.bodies[i].sx, self.bodies[i].sy)
-        end
-    end
-
-    for i=1,#self.bodies do
-        if not (self.bodies[i].type == "Planet") then
-            lg.setColor(self.bodies[i].color)
-            images.draw(self.bodies[i].image, self.bodies[i].x, self.bodies[i].y, self.bodies[i].r, self.bodies[i].sx, self.bodies[i].sy)
-        end
-    end
-    --]]
 
     lg.setColor(self.player.color)
     images.draw(self.player.image, self.player.x, self.player.y, self.player.r, self.player.sx, self.player.sy)

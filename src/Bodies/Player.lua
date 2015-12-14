@@ -6,6 +6,7 @@ local lg = love.graphics
 local random = math.random
 local insert = table.insert
 local remove = table.remove
+local max = math.max
 
 local images = require "images"
 local sound = require "sound"
@@ -32,12 +33,14 @@ function Player:initialize()
     }
     self.warping = false          --prevent abusing warp by rapidly selecting it
 
+    self.communication = false    --used to display and respond to communications
+
     --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
     ---[[
     insert(self.modules, require("Modules.CodeSelector")())
     insert(self.modules, require("Modules.CommandHistory")())
-    insert(self.modules, require("Modules.RawCodeDump")())
-    insert(self.modules, require("Modules.AssemblyDump")())
+    --insert(self.modules, require("Modules.RawCodeDump")())
+    --insert(self.modules, require("Modules.AssemblyDump")())
     insert(self.modules, require("Modules.HeadingModeDisplay")())
     insert(self.modules, require("Modules.Waypoint")())
     insert(self.modules, require("Modules.TargetDisplay")())
@@ -57,10 +60,41 @@ function Player:drawModules()
     for i=1,#self.modules do
         self.modules[i]:draw(self)
     end
+
+    -- I know it is called drawModules, but we also draw dialog screens for communications
+    if self.communication and self.communication.isOpen then
+        local font = lg.getFont()
+        local width
+        if #self.communication == 3 then
+            width = max(font:getWidth(self.communication[1]), font:getWidth(self.communication[2]), font:getWidth(self.communication[3])) + 2
+        else
+            width = font:getWidth(self.communication[1]) + 2
+        end
+
+        lg.setColor(0, 5, 0, 250)
+        lg.rectangle("fill", lg.getWidth()/2 - width/2, lg.getHeight()/2 - 36, width, 48)
+
+        lg.printf(self.communication[1], lg.getWidth()/2 - width/2, lg.getHeight()/2 - 36, width, "left")
+        if #self.communication == 3 then
+            lg.printf(self.communication[2], lg.getWidth()/2 - width/2, lg.getHeight()/2 - 12, width, "left")
+            lg.printf(self.communication[3], lg.getWidth()/2 - width/2, lg.getHeight()/2 + 12, width, "left")
+        else
+            lg.printf("0: Exit communications mode.", lg.getWidth()/2 - width/2, lg.getHeight()/2 - 12, width, "left")
+            lg.printf("1: Hail them again.", lg.getWidth()/2 - width/2, lg.getHeight()/2 + 12, width, "left")
+        end
+    end
 end
 
 function Player:input(button)
     self:opcode(button)
+
+    if self.communication and self.communication.isOpen then
+        if (#self.communication == 3) or (button == "1") then
+            self:openComms(button) -- respond with whatever we said
+        else
+            self.communication = false
+        end
+    end
 end
 
 function Player:opcode(code)
@@ -206,9 +240,11 @@ function Player:abortWarp()
 end
 
 --TODO if not target, broadcast static?
-function Player:openComms()
-    if self.target and not (self.target.type == "Sector") then
-        --TODO stuff
+function Player:openComms(response, target)
+    if self.target and self.target.communicate then
+        self.communication = self.target:communicate(self, response) --response is uneeded here, it is always a nil
+    else
+        self.communication = target:communicate(self, response)
     end
 end
 
