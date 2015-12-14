@@ -27,9 +27,9 @@ end
 
 function Main:keypressed(key)
     if (key == "0") or (key == "kp0") then
-        player:opcode("0")
+        player:input("0")
     elseif (key == "1") or (key == "kp1") then
-        player:opcode("1")
+        player:input("1")
     elseif key == "escape" then
         love.event.quit()
     end

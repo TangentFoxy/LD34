@@ -10,6 +10,7 @@ local remove = table.remove
 local images = require "images"
 local sound = require "sound"
 local StickyNotes = require "Modules.StickyNotes"
+local SelectedTarget = require "Modules.SelectedTarget"
 
 function Player:initialize()
     Body.initialize(self)
@@ -26,17 +27,22 @@ function Player:initialize()
     self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
     self.op = ""                   -- current opcode
     self.ophistory = {}            -- last 5 3bit sequences are saved
-    self.modules = {StickyNotes()} -- display modules
+    self.modules = {               -- display modules
+        StickyNotes(), SelectedTarget()
+    }
     self.warping = false          --prevent abusing warp by rapidly selecting it
 
     --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
-    self.modules[2] = require("Modules.CodeSelector")()
-    self.modules[3] = require("Modules.CommandHistory")()
-    self.modules[4] = require("Modules.RawCodeDump")()
-    self.modules[5] = require("Modules.AssemblyDump")()
-    self.modules[6] = require("Modules.HeadingModeDisplay")()
-    self.modules[7] = require("Modules.Waypoint")()
-    self.modules[8] = require("Modules.TargetDisplay")()
+    ---[[
+    insert(self.modules, require("Modules.CodeSelector")())
+    insert(self.modules, require("Modules.CommandHistory")())
+    insert(self.modules, require("Modules.RawCodeDump")())
+    insert(self.modules, require("Modules.AssemblyDump")())
+    insert(self.modules, require("Modules.HeadingModeDisplay")())
+    insert(self.modules, require("Modules.Waypoint")())
+    insert(self.modules, require("Modules.TargetDisplay")())
+    insert(self.modules, require("Modules.CommandDisplay")())
+    --]]
 end
 
 function Player:update(dt)
@@ -51,6 +57,10 @@ function Player:drawModules()
     for i=1,#self.modules do
         self.modules[i]:draw(self)
     end
+end
+
+function Player:input(button)
+    self:opcode(button)
 end
 
 function Player:opcode(code)

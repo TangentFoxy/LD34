@@ -8,11 +8,6 @@ Factions.
 
 Looting, mining, crafting, enhancing your ship.
 
-
-Universe.
-
-Start with shitty ship.
-
 Stick note of opcodes, doesn't explain heading/targeting.
 - find out by targeting a station nearby ? or space junk?
 
@@ -24,7 +19,6 @@ Solar systems?
 Black holes?
 
 Gas giant. Habitable worlds. Anomalies.
-
 
 - warp tries to move locally or jump sector
 - abortWarp cancels a warp (uh oh, the warp is implemented in a way I can't do this right now!)
@@ -38,5 +32,3 @@ communicate with planets, stations, scan things
 
 add random debris!
 add asteroids
-menu ?
-save/load
