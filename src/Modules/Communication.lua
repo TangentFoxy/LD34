@@ -1,0 +1,1 @@
+--I feel like communication is the type of thing that should be handled by a module.
