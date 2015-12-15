@@ -10,7 +10,7 @@ copyrightYear="2015"
 # (It should be fine to leave this as its default.)
 identifier="com.$author.$packageName"
 # Current version (of your program)
-version="0.1.1"
+version="0.1.2"
 
 ###### Important! ONLY USE ABSOLUATE PATHS ######
 # Where to place the resulting executables.
