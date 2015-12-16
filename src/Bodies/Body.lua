@@ -65,22 +65,12 @@ function Body:setHeading(direction)
         self.r = 0
         self.heading = 11
     end
-    --NOTE this part is lazy for randomization, used with debris
-    --[[ NOTE NOT USED ACTUALLY
-    if direction == 0 then
-        self.r = math.pi/2
-        self.heading = 10
-    elseif direction == 1 then
-        self.r = -math.pi/2
-        self.heading = 1
-    elseif direction == 2 then
-        self.r = math.pi
-        self.heading = 0
-    elseif direction == 3 then
-        self.r = 0
-        self.heading = 11
-    end
-    --]]
 end
+
+--IDEA setRandomHeading() will randomly choose an r value and set heading to 2
+-- (2 being a special value meaning "no heading") ?
+--  I don't think I need to worry about heading being 2, but check anyhow.
+--   (Heading being 2 will just make it impossible to move, because the update
+--    code is based on heading.)
 
 return Body
