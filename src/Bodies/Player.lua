@@ -45,6 +45,13 @@ function Player:initialize()
     insert(self.modules, require("Modules.Waypoint")())
     insert(self.modules, require("Modules.TargetDisplay")())
     insert(self.modules, require("Modules.CommandDisplay")())
+    insert(self.modules, require("Modules.Communication")())
+
+    --NOTE debug print
+    --print(require("lib.inspect")(self.modules))
+    for i=1,#self.modules do
+        print(self.modules[i])
+    end
     --]]
 end
 
@@ -62,12 +69,18 @@ function Player:drawModules()
     end
 
     -- I know it is called drawModules, but we also draw dialog screens for communications
-    --[[
+    -- Communication should be turned into a module I think?
+    --[[ (works as intended! (well, displaying something works as intended))
     self.communication = { --NOTE TEMPORARY DATA SET TO TEST
         "Test display.",
+        --TODO "0: / 1:" should be added here? It will always be those, so I shouldn't have to always type them!
+        "0: Option 1 (err, zero)",
+        "1: Option 2 (well, one)",
         isOpen = true
     }
     --]]
+    -- NOTE why do we have "isOpen" ? It's not needed.
+    --  NOTE Either there is data or it is false!
     if self.communication and self.communication.isOpen then
         local font = lg.getFont()
         local width
