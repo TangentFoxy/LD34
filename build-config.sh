@@ -18,7 +18,7 @@ outputDir="$(pwd)/builds"
 # Where the source code is. (This should be where your main.lua file is.)
 sourceDir="$(pwd)/src"
 # Files to include in ZIP packages. (ReadMe's, licenses, etc.)
-includes="$(pwd)/documents"
+includes="$(pwd)/documents/distribute"
 
 # Where unzipped executables to make packages out of will be kept
 # (This is also where LOVE executables will be kept before modifications to make your packages)
