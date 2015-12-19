@@ -28,7 +28,7 @@ function SelectedTarget:draw(player)
 
     -- background box
     lg.setColor(40, 0, 0, 200)
-    lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 48, width, 48)
+    lg.rectangle("fill", lg.getWidth()/4, lg.getHeight() - 48, width, 24)
     -- text
     lg.setColor(0, 150, 200, 240)
     lg.print(msg, lg.getWidth()/4 + 1, lg.getHeight() - 48)

@@ -30,35 +30,24 @@ function Player:initialize()
     self.ophistory = {}            -- last 5 3bit sequences are saved
     self.warping = false           --prevent abusing warp by rapidly selecting it
 
-    self.modules = {               -- display modules
-        StickyNotes(), SelectedTarget()
-    }
-    setmetatable(self.modules, {
-        __newindex = function(t,k,v)
-            print(t,k,v)
-            for i=1,#t do
-                -- higher priority goes first (initial order is based on 100 to give plenty of space for updates)
-                --NOTE THIS DOES NOTHING! :
-                if t[i].priority > v.priority then
-                    insert(t, v, i)
-                end
-            end
-        end
-    })
-
     self.communication = false    --used to display and respond to communications
 
-    --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
+    self.modules = {}
+    --self.modules = {StickyNotes()}
+    self:addModule(StickyNotes())
+    self:addModule(SelectedTarget())
+
     ---[[
-    insert(self.modules, require("Modules.CodeSelector")())
-    insert(self.modules, require("Modules.CommandHistory")())
-    --insert(self.modules, require("Modules.RawCodeDump")())
-    --insert(self.modules, require("Modules.AssemblyDump")())
-    insert(self.modules, require("Modules.HeadingModeDisplay")())
-    insert(self.modules, require("Modules.Waypoint")())
-    insert(self.modules, require("Modules.TargetDisplay")())
-    insert(self.modules, require("Modules.CommandDisplay")())
-    insert(self.modules, require("Modules.Communication")())
+    --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
+    self:addModule(require("Modules.CodeSelector")())
+    self:addModule(require("Modules.CommandHistory")())
+    --self:addModule(require("Modules.RawCodeDump")())
+    --self:addModule(require("Modules.AssemblyDump")())
+    self:addModule(require("Modules.HeadingModeDisplay")())
+    self:addModule(require("Modules.Waypoint")())
+    self:addModule(require("Modules.TargetDisplay")())
+    self:addModule(require("Modules.CommandDisplay")())
+    self:addModule(require("Modules.Communication")())
 
     --NOTE debug print
     --print(require("lib.inspect")(self.modules))
@@ -268,6 +257,22 @@ end
 function Player:missile()
     if self.target and not (self.target.type == "Sector") then
         --TODO stuff
+    end
+end
+
+function Player:addModule(module)
+    if #self.modules == 0 then
+        self.modules[1] = module
+    else
+        for i=1,#self.modules do
+            --print(self.modules[i].priority ,"> ?", module.priority, (self.modules[i].priority > module.priority) )
+            if self.modules[i].priority < module.priority then
+                insert(self.modules, i, module)
+                return
+            end
+        end
+
+        insert(self.modules, module)
     end
 end
 

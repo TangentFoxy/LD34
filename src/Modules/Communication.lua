@@ -15,7 +15,7 @@ function Communication:draw(player)
     -- I know it is called drawModules, but we also draw dialog screens for communications
     -- Communication should be turned into a module I think?
 
-    ---[[ (works as intended! (well, displaying something works as intended))
+    --[[ (works as intended! (well, displaying something works as intended))
     self.communication = { --NOTE TEMPORARY DATA SET TO TEST
         "Test display.",
         --TODO "0: / 1:" should be added here? It will always be those, so I shouldn't have to always type them!
