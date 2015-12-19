@@ -28,10 +28,23 @@ function Player:initialize()
     self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
     self.op = ""                   -- current opcode
     self.ophistory = {}            -- last 5 3bit sequences are saved
+    self.warping = false           --prevent abusing warp by rapidly selecting it
+
     self.modules = {               -- display modules
         StickyNotes(), SelectedTarget()
     }
-    self.warping = false          --prevent abusing warp by rapidly selecting it
+    setmetatable(self.modules, {
+        __newindex = function(t,k,v)
+            print(t,k,v)
+            for i=1,#t do
+                -- higher priority goes first (initial order is based on 100 to give plenty of space for updates)
+                --NOTE THIS DOES NOTHING! :
+                if t[i].priority > v.priority then
+                    insert(t, v, i)
+                end
+            end
+        end
+    })
 
     self.communication = false    --used to display and respond to communications
 
@@ -67,48 +80,12 @@ function Player:drawModules()
     for i=1,#self.modules do
         self.modules[i]:draw(self)
     end
-
-    -- I know it is called drawModules, but we also draw dialog screens for communications
-    -- Communication should be turned into a module I think?
-    --[[ (works as intended! (well, displaying something works as intended))
-    self.communication = { --NOTE TEMPORARY DATA SET TO TEST
-        "Test display.",
-        --TODO "0: / 1:" should be added here? It will always be those, so I shouldn't have to always type them!
-        "0: Option 1 (err, zero)",
-        "1: Option 2 (well, one)",
-        isOpen = true
-    }
-    --]]
-    -- NOTE why do we have "isOpen" ? It's not needed.
-    --  NOTE Either there is data or it is false!
-    if self.communication and self.communication.isOpen then
-        local font = lg.getFont()
-        local width
-        if #self.communication == 3 then
-            width = max(font:getWidth(self.communication[1]), font:getWidth(self.communication[2]), font:getWidth(self.communication[3])) + 2
-        else
-            width = max(font:getWidth(self.communication[1]), font:getWidth("0: Exit communications mode.")) + 2
-        end
-
-        lg.setColor(0, 105, 0, 250)
-        lg.rectangle("fill", lg.getWidth()/2 - width/2, lg.getHeight()/2 - 36, width, 72)
-
-        lg.setColor(255, 250, 250, 255)
-        lg.printf(self.communication[1], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 36, width - 1, "left")
-        if #self.communication == 3 then
-            lg.printf(self.communication[2], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 12, width - 1, "left")
-            lg.printf(self.communication[3], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 + 12, width - 1, "left")
-        else
-            lg.printf("0: Exit communications mode.", lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 12, width, "left")
-            lg.printf("1: Hail them again.", lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 + 12, width - 1, "left")
-        end
-    end
 end
 
 function Player:input(button)
     self:opcode(button)
 
-    --TODO comms should be a mode?
+    --TODO comms should be a mode? yes
     if self.communication and self.communication.isOpen then
         if (#self.communication == 3) or (button == "1") then
             self:openComms(button) -- respond with whatever we said

@@ -9,6 +9,7 @@ local sqrt = math.sqrt
 
 function TargetDisplay:initialize()
     Module.initialize(self)
+    self.priority = 400
 end
 
 --TODO somehow option always draw target options ?

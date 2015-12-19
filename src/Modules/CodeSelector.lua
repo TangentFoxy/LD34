@@ -5,6 +5,7 @@ local lg = love.graphics
 
 function CodeSelector:initialize()
     Module.initialize(self)
+    self.priority = 300
 end
 
 function CodeSelector:draw(player)

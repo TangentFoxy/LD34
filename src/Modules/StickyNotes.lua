@@ -8,6 +8,8 @@ local note2 = lg.newImage("img/note2.png")
 
 function StickyNotes:initialize()
     Module.initialize(self)
+
+    self.priority = 0 --StickyNote ARE ALWAYS LAST
 end
 
 function StickyNotes:draw()

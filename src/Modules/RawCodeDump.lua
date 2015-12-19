@@ -6,6 +6,7 @@ local lg = love.graphics
 
 function RawCodeDump:initialize()
     Module.initialize(self)
+    self.priority = 9700
 end
 
 function RawCodeDump:draw(player)

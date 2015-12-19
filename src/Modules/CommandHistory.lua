@@ -6,6 +6,7 @@ local insert = table.insert
 
 function CommandHistory:initialize()
     Module.initialize(self)
+    self.priority = 9800
 end
 
 function CommandHistory:draw(player)

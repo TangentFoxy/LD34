@@ -5,6 +5,7 @@ local lg = love.graphics
 
 function SelectedTarget:initialize()
     Module.initialize(self)
+    self.priority = 200
 end
 
 function SelectedTarget:draw(player)

@@ -7,6 +7,7 @@ local lg = love.graphics
 
 function CommandDisplay:initialize()
     Module.initialize(self)
+    self.priority = 101
 end
 
 function CommandDisplay:draw(player)

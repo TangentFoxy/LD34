@@ -5,6 +5,7 @@ local lg = love.graphics
 
 function HeadingModeDisplay:initialize()
     Module.initialize(self)
+    self.priority = 500
 end
 
 function HeadingModeDisplay:draw(player)

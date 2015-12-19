@@ -6,6 +6,7 @@ local lg = love.graphics
 
 function AssemblyDump:initialize()
     Module.initialize(self)
+    self.priority = 9900
 end
 
 function AssemblyDump:draw(player)

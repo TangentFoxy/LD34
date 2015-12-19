@@ -12,6 +12,7 @@ local images = require "images"
 
 function Waypoint:initialize()
     Module.initialize(self)
+    self.priority = 9600
 
     self.time = 0
     self.angle = 0
