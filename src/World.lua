@@ -2,6 +2,7 @@ local class = require "lib.middleclass"
 local World = class("World")
 
 local Sector = require "Sector"
+local lady = require "lib.lady"
 
 function World:initialize()
     --self.type = "World"
@@ -30,6 +31,14 @@ end
 
 function World:draw()
     self.current:draw()
+end
+
+function World:save(file)
+    lady.save_all(file, self) --not sure if actually saves all
+end
+
+function World:load(file)
+    self = lady.load_all(file) --not sure if works or breaks!
 end
 
 return World
