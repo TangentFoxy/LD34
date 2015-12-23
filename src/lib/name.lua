@@ -5,6 +5,8 @@ local randomNormal = love.math.randomNormal
 
 local name = {}
 
+--TODO quit being lazy and redo this using proper percentages
+--TODO make a Markov chain based version? No? Yes? I don't know.
 function name.generate(min, max)
     local mean = floor(min + (max - min)/2)
     local stddev = (max - min)/2

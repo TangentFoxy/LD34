@@ -99,4 +99,11 @@ function Body:setHeading(direction)
     --]]
 end
 
+--TODO define a standard communication implementation
+--     default: A message about how "name" cannot communicate (for all non-communicating bodies).
+function Body:communicate(from, message)
+    --NOTE this default should reply instantly
+    --      anything else should have a delay!
+end
+
 return Body

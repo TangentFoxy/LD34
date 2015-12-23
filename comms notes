@@ -1,0 +1,32 @@
+TODO ? Abandon the bit controls? Not quite, but:
+ Make it possible to upgrade to a command line.
+
+IDEA CHANGE HOW COMMUNICATIONS ARE HANDLED:
+If only 1 item returned, don't display and wait for answer, just display along
+bottom of screen for x time. Else, display and wait for answer.
+
+Everything has:
+- communication
+  false or contains communication response in the form of
+  1: response
+  2: option 0
+  3: option 1
+  or
+  1: response
+- commsTarget
+  this is so targets aren't removed by incoming communications
+  when incoming -> (if target) then set commsTarget, (else) set target
+  ((commsTarget is only ever used for comms, if target becomes unset, it should be
+  set with commsTarget ??))
+  (note: display thing for displaying where who communicating with you)
+- commsHistory
+  table of past communication datas
+  every time communication is set to false, whatever was in it gets inserted here
+- communicate(from, message)
+  called by others to send a message, message will be a communication table;
+  and from will be who is sending this message
+  this function should store the communication (message) and (if AI) set a delay
+  to respond, (elseif player) prompt that a message has arrived
+  (you must open comms to read and reply to it)
+
+Player has:

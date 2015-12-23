@@ -12,6 +12,7 @@ local images = require "images"
 local sound = require "sound"
 local StickyNotes = require "Modules.StickyNotes"
 local SelectedTarget = require "Modules.SelectedTarget"
+local Communication = require "Modules.Communication"
 
 function Player:initialize()
     Body.initialize(self)
@@ -21,8 +22,7 @@ function Player:initialize()
     self.sx = 3
     self.sy = 3
 
-    self.target = false --unique
-    self.targetDirection = false --this is direction we would be moving towards the target (sector only)
+    self.targetDirection = false --for sector targeting
 
     --unique stuff
     self.mode = 0                  -- opcode mode (main=0, target=1, heading=2)
@@ -30,12 +30,10 @@ function Player:initialize()
     self.ophistory = {}            -- last 5 3bit sequences are saved
     self.warping = false           --prevent abusing warp by rapidly selecting it
 
-    self.communication = false    --used to display and respond to communications
-
     self.modules = {}
-    --self.modules = {StickyNotes()}
     self:addModule(StickyNotes())
     self:addModule(SelectedTarget())
+    self:addModule(Communication())
 
     ---[[
     --NOTE TEMP THINGS FOR TESTING, YOU SHOULD NOT HAVE THESE
@@ -47,7 +45,6 @@ function Player:initialize()
     self:addModule(require("Modules.Waypoint")())
     self:addModule(require("Modules.TargetDisplay")())
     self:addModule(require("Modules.CommandDisplay")())
-    self:addModule(require("Modules.Communication")())
 
     --NOTE debug print
     --print(require("lib.inspect")(self.modules))
@@ -71,10 +68,14 @@ function Player:drawModules()
     end
 end
 
+-- TODO combine input and opcode .. into just input, we don't need another function for input
+--  splitting it was stupid ?
+-- well some things are immediate..some require insertion into history.. :/
 function Player:input(button)
     self:opcode(button)
 
     --TODO comms should be a mode? yes
+    --[[
     if self.communication and self.communication.isOpen then
         if (#self.communication == 3) or (button == "1") then
             self:openComms(button) -- respond with whatever we said
@@ -82,9 +83,24 @@ function Player:input(button)
             self.communication = false
         end
     end
+    --]]
 end
 
 function Player:opcode(code)
+    if self.mode == 3 then
+        -- COMMS MODE
+        if self.communication then
+            if (#self.communication == 3) or (code == "1") then
+                self:openComms(code)
+            else
+                self.communication = false
+                self.mode = 0
+            end
+        end
+
+        return
+    end
+
     self.op = self.op .. code
 
     if #self.op >= 3 then
@@ -184,6 +200,8 @@ end
 
 function Player:warp()
     if not self.warping then
+        --TODO break into warp to local target and warp to sector!
+        -- (maybe have an energy cost and max range defined by energy? energy accumilates slowly)
         if self.target and (self.target.type == "Sector") then
             self.warping = self.sector:after(3, function()
                 self.sector:leave(self, true)
@@ -227,12 +245,12 @@ function Player:abortWarp()
 end
 
 --TODO if not target, broadcast static?
-function Player:openComms(response, target)
+function Player:openComms(code, target)
     if self.target and self.target.communicate then
-        self.communication = self.target:communicate(self, response) --response is uneeded here, it is always a nil
+        self.communication = self.target:communicate(self, code) --code is uneeded here, it is always a nil
     else
         if target then
-            self.communication = target:communicate(self, response)
+            self.communication = target:communicate(self, code)
         else
             print("I FUCKED SOMETHING UP THIS ERROR SHOULDN'T HAPPEN\nI BLAME LOMELI EVEN THOUGH HE HAD NOTHING TO DO WITH IT.")
         end
