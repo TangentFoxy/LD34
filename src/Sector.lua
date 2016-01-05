@@ -17,27 +17,6 @@ local Asteroid = require "Bodies.Asteroid"
 local Debris = require "Bodies.Debris"
 local Missile = require "Bodies.Missile" --NOTE probably not going to generate missiles in sectors!!
 
---[[
-local Bodies = {
-    Station = require "Bodies.Station",
-    Star = require "Bodies.Star",
-    Planet = require "Bodies.Planet",
-    Anomaly = require "Bodies.Anomaly",
-    Asteroid = require "Bodies.Asteroid",
-    Debris = require "Bodies.Debris",
-    Missile = require "Bodies.Missile", --NOTE probably not going to generate missiles in sectors!!
-}
---]]
-
--- this might be a bad idea
---[[
-local special = {
-    {0, 0} = {
-        Station(100, "start")
-    }
-}
---]]
-
 local Special = {
     [0] = {
         [0] = {
@@ -57,6 +36,7 @@ local Special = {
     }
 }
 
+--TODO use lume.weightedchoice to give these percentages of chance
 local Templates = {
     {   -- nothingness
         background = function() return {} end,
@@ -111,12 +91,6 @@ function Sector:initialize(world, x, y)
         self.bodies = Templates[template].bodies()
         self.radius = Templates[template].radius
     end
-
-    --[[
-    for i=1,#Templates[template].background do
-        insert(self.background, Bodies[ Templates[template].background[i] ]())
-    end
-    --]]
 
     --[[
     --TODO GENERATE STUFF

@@ -23,7 +23,17 @@ function Station:initialize(distance, special)
     self.commsTrack = 0 --nothing special is happening communications-wise
 end
 
-function Station:communicate(incoming, response)
+--TODO Markov chain generated messages, either floating in the ether, or for actual replies.
+--      Note: Only do this for non-important stuff. Unless I can derive a way to give meaning.
+function Station:communicate(from, message)
+    if self.special == "start" then
+        --
+    else
+        self.sector:after(1, function()
+            from:communicate(self, {"Go away! We don't want to talk to you."})
+        end)
+    end
+    --[[
     if self.special == "start" then
         if self.commsTrack == 0 then
             self.commsTrack = 1
@@ -40,6 +50,7 @@ function Station:communicate(incoming, response)
             isOpen = true
         }
     end
+    --]]
 end
 
 return Station

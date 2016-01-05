@@ -7,7 +7,7 @@ local lume = require "lib.lume"
 function Body:initialize()
     -- Basics
     self.type = "Body"
-    self.name = random() --TODO make subclasses modify instead of replace this? use uuid in naming? idk
+    self.name = random()
     self.uuid = lume.uuid()
     -- Position
     --TODO make this (sector) actually set for everything!
@@ -22,13 +22,14 @@ function Body:initialize()
     self.maxSpeed = 8         -- 100 pixels per second
     -- Display
     self.color = {random(80, 240), random(80, 240), random(80, 240), 255}
-    self.image = 0 --there is no 0 image
+    self.image = 0 --there is no 0 image TODO images using identifiers instead of integers?
     self.sx = 1
     self.sy = 1
     -- References/Contains
     self.target = false --would be reference to targeted body
         --NOTE POTENTIAL BUG:
         -- if something is targeting something and it leaves the sector, it is still targeted!
+        --TODO when anything leaves a sector, reset its target
     self.communication = false
     self.commsHistory = {}
     --[[
@@ -80,30 +81,24 @@ function Body:setHeading(direction)
     elseif direction == "down" then
         self.r = 0
         self.heading = 11
+    elseif direction == "random" then --TODO use this
+        self.r = random()*math.pi*2
+        self.heading = 2 --special, means random
     end
-    --NOTE this part is lazy for randomization, used with debris
-    --[[ NOTE NOT USED ACTUALLY
-    if direction == 0 then
-        self.r = math.pi/2
-        self.heading = 10
-    elseif direction == 1 then
-        self.r = -math.pi/2
-        self.heading = 1
-    elseif direction == 2 then
-        self.r = math.pi
-        self.heading = 0
-    elseif direction == 3 then
-        self.r = 0
-        self.heading = 11
-    end
-    --]]
 end
 
 --TODO define a standard communication implementation
 --     default: A message about how "name" cannot communicate (for all non-communicating bodies).
 function Body:communicate(from, message)
+    -- is return the best way to handle this? no, I think it should call communicate back on what started it
+    --return {self.name .. " cannot communicate."}
+
     --NOTE this default should reply instantly
     --      anything else should have a delay!
+    -- we don't save into self.commsHistory, not all bodies can save this info
+    from:communicate(self, {self.name .. " cannot communicate."})
+    --NOTE danger of inifinite loop if something without overridden comms
+    --      tries to comm with another not-overridden object
 end
 
 return Body

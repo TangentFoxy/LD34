@@ -1,0 +1,28 @@
+Design Doc
+
+- [ ] World
+      - [x] Store Sectors
+      - [ ] Manage access to Sectors (double check relations between Player,Sector,World)
+      - [ ] Save Sectors
+      - [ ] Handle movement between Sectors (double check relations between Player,Sector,World)
+            This is not how it is. Sectors manage entry and exit themselves, and just use World to get as each other.
+- [ ] Sector
+      - [ ] Store backgrounds
+            - [ ] Star fields
+            - [ ] Stars
+                  - [ ] Types, somewhat realistic to what types of stars exist
+                  - [ ] Replace existing star graphic with something with more variation (both in gradient and a few random dots (think sunspots, maybe an arc? variation in star graphics plz!))
+      - [ ] Store bodies
+            - [ ] Asteroids
+            - [ ] Planets
+            - [ ] Stations
+            - [ ] Ships
+            - [ ] Missiles
+            - [ ] Explosions
+                  - [ ] When called, distributes data/items from parent to Debris objects formed after explosion!
+            - [ ] Debris
+      - [ ] Handle main game loop (double check this, again, interaction between main, gamestate, and World/Sector/Player/others)
+- [ ] Player
+      - [x] Controlled via opcodes (binary!) *only*
+            - [ ] Add modules to upgrade controls ? FEATURE CREEP, BEWARE
+      - [ ] Stores items, modules, whatever..as all bodies do..

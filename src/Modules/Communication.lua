@@ -28,23 +28,23 @@ function Communication:draw(player)
     -- NOTE why do we have "isOpen" ? It's not needed.
     --  NOTE Either there is data or it is false!
     -- rather than checking for communication, check for mode, make comms a mode!
-    if self.communication and self.communication.isOpen then
+    if player.communication then
         local font = lg.getFont()
         local width
-        if #self.communication == 3 then
-            width = max(font:getWidth(self.communication[1]), font:getWidth(self.communication[2]), font:getWidth(self.communication[3])) + 2
+        if #player.communication == 3 then
+            width = max(font:getWidth(player.communication[1]), font:getWidth(player.communication[2]), font:getWidth(player.communication[3])) + 2
         else
-            width = max(font:getWidth(self.communication[1]), font:getWidth("0: Exit communications mode.")) + 2
+            width = max(font:getWidth(player.communication[1]), font:getWidth("0: Exit communications mode.")) + 2
         end
 
         lg.setColor(0, 105, 0, 250)
         lg.rectangle("fill", lg.getWidth()/2 - width/2, lg.getHeight()/2 - 36, width, 72)
 
         lg.setColor(255, 250, 250, 255)
-        lg.printf(self.communication[1], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 36, width - 1, "left")
-        if #self.communication == 3 then
-            lg.printf(self.communication[2], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 12, width - 1, "left")
-            lg.printf(self.communication[3], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 + 12, width - 1, "left")
+        lg.printf(player.communication[1], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 36, width - 1, "left")
+        if #player.communication == 3 then
+            lg.printf(player.communication[2], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 12, width - 1, "left")
+            lg.printf(player.communication[3], lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 + 12, width - 1, "left")
         else
             lg.printf("0: Exit communications mode.", lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 - 12, width, "left")
             lg.printf("1: Hail them again.", lg.getWidth()/2 - width/2 + 1, lg.getHeight()/2 + 12, width - 1, "left")

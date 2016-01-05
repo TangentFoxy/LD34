@@ -6,6 +6,8 @@ local random = math.random
 
 --TODO Debris is made FROM something, and has to know how much debris is being
 --     generated so it doesn't duplicate any physical thing stored onboard
+-- (there is a note on an issue about how to do this, using explosion bodies as
+--  a surrogate)
 function Debris:initialize(range)
     Body.initialize(self)
     self.type = "Debris"

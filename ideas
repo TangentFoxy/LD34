@@ -1,0 +1,38 @@
+- when debris is created, it is informed of its
+  source, some debris have a chance of containing some things from its
+  source
+  - NOTE: Must be careful! If debris are created independently, debris could
+    duplicate items!
+- add loading screen (for assets, require images / audio once to have them loaded)
+- add libs used / licensing info
+- NOTE: anything destroyed that has set a cron job in its sector will not have it
+         cleared!! fix that
+
+```
+--NOTE for Lady, which I am not sure I can use.
+
+-- if you use MiddleClass, you don't have to register every class manually if
+-- you include the following function definition after importing MiddleClass
+-- and Lady:
+function class.Object.static:subclassed(other)
+    lady.register_class(other)
+end
+
+-- saving
+-- (what are these parameters? are they specific objects to save?)
+lady.save_all(file_name, player, enemy_list, goal_list)
+
+-- loading
+-- (I guess they are..)
+player, enemy_list, goal_list = lady.load_all(file_name)
+```
+
+```
+--NOTE for sandbox
+sandbox(fn) --returns sandboxed function
+sandbox.protect(fn) --same thing
+sandbox.run(fn) --sandboxes, then runs fn
+```
+
+NOTE: If Lady doesn't work or I want smaller (or harder to read) save files...
+Check out Binser: https://github.com/bakpakin/binser
