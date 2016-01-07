@@ -1,7 +1,4 @@
-Modules are stored in descending order, and drawn in the same order.
-This means highest "priority" is drawn first, and therefore can be
-drawn over by another.. which is really kind of backwards if you
-think about it.
+Highest number drawn first. Lowest number can overwrite others.
 
 StickyNotes            0
 Communication        100

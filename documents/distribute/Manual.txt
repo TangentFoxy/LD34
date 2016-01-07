@@ -1,0 +1,49 @@
+Note: This manual is meant to explain the basics of flying your ship. There are
+quick reference notes in game, as well as modules you can get fairly early on to
+make things easier!
+
+You start with a shuttle with damaged controls, and have to use op-codes to
+control it. Typing 1's and 0's will execute the commands below:
+
+- 000 Selects targeting mode. (Targets are necessary for most actions.)
+- 001 Selects heading mode. (From here you control all movement except warping.)
+- 010 Starts warp. (If targeting anything, you warp to it. Else, in the
+  direction you are facing.)
+- 011 Stops warp. (Cancels the countdown for a current warp command.)
+  (Note: This will also used for certain advanced commands.)
+- 100 Opens communications. (You must either have targeted something, or have
+  received a communication. Targets are preferred over received communications.)
+- 101 Scans a target. (Providing you with information about it. Can also trigger
+  events.)
+- 110 Fires a laser at a target. (This will damage shields, or mine asteroids,
+  or damage unshielded targets.)
+- 111 Fires a missile at a target. (This will damage targets, or obliterate
+  asteroids, but you have a limited number of missiles.)
+
+TARGETING MODE:
+
+When in targeting mode, you must enter 3 more digits to select a target:
+
+- 000 Targets the Sector UP.
+- 001 Targets the Sector RIGHT.
+- 010 Targets the Sector LEFT.
+- 011 Targets the Sector DOWN.
+
+- 100 Targets whatever is closest to you.
+- 101 Targets whatever is 2nd closest to you.
+- 110 Targets whatever is 3rd closest to you.
+- 111 Targets whatever is 4th closest to you.
+
+HEADING MODE:
+
+When in heading mode, you must enter 3 more digits to issue a command:
+
+- 000 Face UP.
+- 001 Face RIGHT.
+- 010 Face LEFT
+- 011 Face DOWN.
+
+- 100 Stop. (Note: You cannot stop instantly.)
+- 101 Speed up.
+- 110 Slow down.
+- 111 Go to max speed. (Note: You cannot go to max speed instantly.)

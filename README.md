@@ -10,7 +10,4 @@ Originally, you would start with just "sticky notes" telling you how to fly your
 able to install "modules" to customize your ship's interface and make it easier to fly, as well as start
 colonies or something..maybe. I never planned that far ahead because I was rushing just to get it working.
 
-Unlike my last Ludum Dare attempt, this runs, and doesn't have a game-breaking crash in it! (As far as I
-know, but because I said that, it will have a game-breaking bug now, I'm sure.)
-
-## [Vote on Ludum Dare!](http://ludumdare.com/compo/ludum-dare-34/?action=preview&uid=52323)
+## [Download from Itch.io!](http://guard13007.itch.io/ld34) | [View on Ludum Dare!](http://ludumdare.com/compo/ludum-dare-34/?action=preview&uid=52323)
