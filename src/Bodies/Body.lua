@@ -9,29 +9,34 @@ function Body:initialize()
     self.type = "Body"
     self.name = random()
     self.uuid = lume.uuid()
+
     -- Position
     --TODO make this (sector) actually set for everything!
     self.sector = false --sector this body is in
     self.x = 0
     self.y = 0
     self:setHeading("right") --self.r / self.heading
+
     -- Movement
     self.throttle = 0
     self.speed = 0
     self.acceleration = 0.032 -- 1 pixel per second^2
     self.maxSpeed = 8         -- 100 pixels per second
+
     -- Display
     self.color = {random(80, 240), random(80, 240), random(80, 240), 255}
     self.image = 0 --there is no 0 image TODO images using identifiers instead of integers?
     self.sx = 1
     self.sy = 1
+
     -- References/Contains
     self.target = false --would be reference to targeted body
-        --NOTE POTENTIAL BUG:
-        -- if something is targeting something and it leaves the sector, it is still targeted!
-        --TODO when anything leaves a sector, reset its target
     self.communication = false
     self.commsHistory = {}
+    self.commsTarget = false --used to store who sent last communication
+    --TODO when leaving a Sector, communication needs to be placed in commsHistory, commsTarget needs to be set to false
+    --TODO make all leaving Sector stuff that Bodies need to have done to them..DONE BY BODY. Body:leave(Sector) or something
+
     --[[
     self.modules = {} --these modify capabilities
     self.storage = {
@@ -90,9 +95,6 @@ end
 --TODO define a standard communication implementation
 --     default: A message about how "name" cannot communicate (for all non-communicating bodies).
 function Body:communicate(from, message)
-    -- is return the best way to handle this? no, I think it should call communicate back on what started it
-    --return {self.name .. " cannot communicate."}
-
     --NOTE this default should reply instantly
     --      anything else should have a delay!
     -- we don't save into self.commsHistory, not all bodies can save this info

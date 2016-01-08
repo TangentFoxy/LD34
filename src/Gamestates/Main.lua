@@ -26,6 +26,7 @@ function Main:draw()
 end
 
 function Main:keypressed(key)
+    ---[[
     if (key == "0") or (key == "kp0") then
         player:input("0")
     elseif (key == "1") or (key == "kp1") then
@@ -33,6 +34,14 @@ function Main:keypressed(key)
     elseif key == "escape" then
         love.event.quit()
     end
+    --]]
+    --[[ TODO switch to this for input
+    if key == "escape" then
+        love.event.quit()
+    else
+        player:key(key)
+    end
+    ]]
 end
 
 --[[

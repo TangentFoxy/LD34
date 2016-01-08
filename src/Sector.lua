@@ -1,10 +1,5 @@
 local class = require "lib.middleclass"
 local Sector = class("Sector")
-local lg = love.graphics
-local insert = table.insert
-local remove = table.remove
-local sort = table.sort
-local random = math.random
 
 local images = require "images"
 local cron = require "lib.cron"
@@ -17,6 +12,14 @@ local Asteroid = require "Bodies.Asteroid"
 local Debris = require "Bodies.Debris"
 local Missile = require "Bodies.Missile" --NOTE probably not going to generate missiles in sectors!!
 
+local lg = love.graphics
+local insert = table.insert
+local remove = table.remove
+local sort = table.sort
+local random = math.random
+
+-- "Special" Sectors are defined by where they should occur,
+--  and consist of functions to return what they should contain.
 local Special = {
     [0] = {
         [0] = {
@@ -36,6 +39,8 @@ local Special = {
     }
 }
 
+-- "Templates" are used to generate non-Special Sectors by randomly choosing and
+--  running one.
 --TODO use lume.weightedchoice to give these percentages of chance
 local Templates = {
     {   -- nothingness
@@ -75,12 +80,13 @@ function Sector:initialize(world, x, y)
     self.x = x
     self.y = y
 
-    self.background = {}
-    self.bodies = {}
-    self.player = false --player body when player is in sector
+    self.background = {} --cannot be interacted with, for decoration
+    self.bodies = {}     --everything else (except the player)
+    self.player = false  --player body when player is in sector
 
-    self.jobs = {} --timed things to do
+    self.jobs = {}       --timed things to do
 
+    -- generate based on "Special" Sector or Templates
     if Special[x] and Special[x][y] then
         self.background = Special[x][y].background()
         self.bodies = Special[x][y].bodies()
@@ -91,23 +97,6 @@ function Sector:initialize(world, x, y)
         self.bodies = Templates[template].bodies()
         self.radius = Templates[template].radius
     end
-
-    --[[
-    --TODO GENERATE STUFF
-    self.background[1] = Star(500)
-    self.bodies[1] = Station(100)
-    self.bodies[2] = Planet(2000)
-    self.radius = 200
-
-    --NOTE throwing random shit in to test things!
-    for i=1,30 do
-        --insert(self.bodies, Anomaly(500))
-        insert(self.bodies, Asteroid(1500))
-        --insert(self.bodies, Debris(500))
-        --insert(self.bodies, Missile(random(-500, 500), random(-250, 250)))
-    end
-    --insert(self.bodies, Planet(300))
-    --]]
 end
 
 function Sector:update(dt)
@@ -125,28 +114,35 @@ function Sector:update(dt)
         self.jobs[key] = nil
     end
 
-    -- update all bodies (and player)
+    -- update all bodies
     for i=1,#self.bodies do
         self.bodies[i]:update(dt)
     end
 
+    -- update player
     if self.player then
         self.player:update(dt)
     end
 end
 
+--TODO redo this based on a single pair of translations ?
 function Sector:draw()
+    -- 0/0 is center of screen
     lg.translate(lg.getWidth()/2, lg.getHeight()/2)
 
+    -- background bodies are drawn relative to player's position scaled down by 12x
     for i=1,#self.background do
         lg.setColor(self.background[i].color)
         images.draw(self.background[i].image, self.background[i].x - (self.player.x/12), self.background[i].y - (self.player.y/12), self.background[i].r, self.background[i].sx, self.background[i].sy)
     end
 
+    -- we drawn everything else relative to the player
     lg.translate(-self.player.x, -self.player.y)
 
     local layers = {"Anomaly", "Planet", "Asteroid", "Station", "Debris", "Missile"}
 
+    --NOTE if performance becomes a concern, everything is drawn every frame,
+    -- but items are only inserted rarely, sort at place so we don't loop 7 fucking times to draw
     for j=1,#layers do
         for i=1,#self.bodies do
             if self.bodies[i].type == layers[j] then
@@ -170,6 +166,7 @@ function Sector:getRelativeSector(x, y)
 end
 
 --NOTE non-player bodies should get targetDirection in the future
+--NOTE what the fuck is targetDirection? is this the only place it is referenced?
 function Sector:enter(body, isPlayer)
     body.sector = self
     body.target = false -- don't target a sector you're in (or a body in another sector)
